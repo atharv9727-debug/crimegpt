@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Globe, Search } from 'lucide-react';
+import { Globe, Search, Bell } from 'lucide-react';
 import useStore from '../../store/useStore';
-import logoImg from '../../assets/logo.png';
 import './Topbar.css';
 
 const LANGUAGES = [
@@ -67,7 +66,7 @@ export default function Topbar({ title, subtitle }) {
               setHasUnread(false);
             }}
           >
-            <img src={logoImg} className="main-logo-icon-img" alt="Notifications" />
+            <Bell size={18} className="notif-icon-bell" />
             {hasUnread && <span className="notif-dot" aria-hidden="true" />}
           </button>
 

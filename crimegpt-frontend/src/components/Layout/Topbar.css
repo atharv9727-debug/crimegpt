@@ -105,17 +105,16 @@
   position: relative;
 }
 
-.main-logo-icon-img {
-  width: 18px;
-  height: 18px;
-  object-fit: contain;
+.notif-icon-bell {
+  color: #a78bfa;
   filter: drop-shadow(0 0 3px rgba(167,139,250,0.3));
   transition: var(--transition);
 }
-.icon-btn:hover .main-logo-icon-img,
-.icon-btn.active .main-logo-icon-img {
+.icon-btn:hover .notif-icon-bell,
+.icon-btn.active .notif-icon-bell {
+  color: #c084fc;
   transform: scale(1.05);
-  filter: drop-shadow(0 0 5px rgba(167,139,250,0.6));
+  filter: drop-shadow(0 0 5px rgba(192,132,252,0.6));
 }
 
 .notif-dropdown {
