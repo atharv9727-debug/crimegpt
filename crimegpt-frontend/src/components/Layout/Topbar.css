@@ -105,15 +105,17 @@
   position: relative;
 }
 
-.main-logo-icon {
-  color: #a78bfa;
+.main-logo-icon-img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
   filter: drop-shadow(0 0 3px rgba(167,139,250,0.3));
   transition: var(--transition);
 }
-.icon-btn:hover .main-logo-icon,
-.icon-btn.active .main-logo-icon {
-  color: #c084fc;
-  filter: drop-shadow(0 0 5px rgba(192,132,252,0.6));
+.icon-btn:hover .main-logo-icon-img,
+.icon-btn.active .main-logo-icon-img {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 5px rgba(167,139,250,0.6));
 }
 
 .notif-dropdown {
