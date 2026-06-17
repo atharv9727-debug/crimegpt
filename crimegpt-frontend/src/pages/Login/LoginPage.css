@@ -105,10 +105,19 @@
   position: relative;
   display: flex;
   align-items: center;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 0 14px;
+  gap: 10px;
+  transition: var(--transition);
+  width: 100%;
+}
+.login-page .input-wrap:focus-within {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
 }
 .login-page .input-icon {
-  position: absolute;
-  left: 14px;
   color: var(--text-muted);
   pointer-events: none;
   flex-shrink: 0;
@@ -117,27 +126,30 @@
   justify-content: center;
 }
 .login-page .input-wrap input {
-  width: 100%;
-  background: var(--bg-elevated);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-md);
-  padding: 11px 40px 11px 42px;
+  flex: 1;
+  background: transparent !important;
+  border: none !important;
+  padding: 11px 0 !important;
   font-size: 14px;
-  color: var(--text-primary);
-  transition: var(--transition);
-  outline: none;
+  color: var(--text-primary) !important;
+  outline: none !important;
+  box-shadow: none !important;
+  width: 100%;
 }
 .login-page .input-wrap input::placeholder { color: var(--text-muted); }
-.login-page .input-wrap input:focus { border-color: var(--accent-primary); box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
-.pass-toggle {
-  position: absolute;
-  right: 12px;
+.login-page .pass-toggle {
   background: transparent;
+  border: none;
   color: var(--text-muted);
   transition: var(--transition);
   padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
 }
-.pass-toggle:hover { color: var(--text-primary); }
+.login-page .pass-toggle:hover { color: var(--text-primary); }
 
 /* Submit */
 .login-submit {
