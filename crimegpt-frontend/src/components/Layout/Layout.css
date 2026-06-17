@@ -26,5 +26,18 @@
 @media (max-width: 768px) {
   .app-shell.sidebar-open .main-area,
   .app-shell.sidebar-collapsed .main-area { margin-left: 0; }
+  
+  .app-shell.sidebar-open .topbar,
+  .app-shell.sidebar-collapsed .topbar { left: 0; }
+
   .page-content { padding: 16px; }
+
+  .sidebar-overlay-mobile {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+    z-index: 95;
+    animation: fadeIn 0.2s ease-out;
+  }
 }

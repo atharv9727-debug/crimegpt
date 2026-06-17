@@ -188,3 +188,35 @@
   border-radius: var(--radius-md);
   border: 1px solid var(--border-subtle);
 }
+
+@media (max-width: 600px) {
+  .preview-overlay {
+    padding: 12px;
+  }
+  .preview-modal {
+    max-height: 94vh;
+  }
+  .preview-header {
+    padding: 14px 16px;
+  }
+  .preview-body {
+    padding: 14px;
+  }
+  .preview-content {
+    padding: 12px;
+    font-size: 11px;
+  }
+  .docs-search {
+    width: 100%;
+  }
+  .case-selector-wrap {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+  }
+  .case-selector-wrap select {
+    width: 100%;
+    min-width: 0;
+  }
+}

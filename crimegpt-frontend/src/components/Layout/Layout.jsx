@@ -20,6 +20,7 @@ const PAGE_TITLES = {
 export default function Layout({ children }) {
   const { t } = useTranslation();
   const sidebarOpen = useStore(s => s.sidebarOpen);
+  const toggleSidebar = useStore(s => s.toggleSidebar);
   const location = useLocation();
   const path = location.pathname;
 
@@ -30,6 +31,7 @@ export default function Layout({ children }) {
   return (
     <div className={`app-shell ${sidebarOpen ? 'sidebar-open' : 'sidebar-collapsed'}`}>
       <Sidebar />
+      {sidebarOpen && <div className="sidebar-overlay-mobile" onClick={toggleSidebar} />}
       <div className="main-area">
         <Topbar title={t(meta.titleKey)} subtitle={t(meta.subtitleKey)} />
         <main className="page-content fade-in">

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Globe, Search, Bell } from 'lucide-react';
+import { Globe, Search, Bell, Menu } from 'lucide-react';
 import useStore from '../../store/useStore';
 import './Topbar.css';
 
@@ -12,7 +12,7 @@ const LANGUAGES = [
 
 export default function Topbar({ title, subtitle }) {
   const { t, i18n } = useTranslation();
-  const { language, setLanguage, stats } = useStore();
+  const { language, setLanguage, stats, toggleSidebar } = useStore();
   const [showNotif, setShowNotif] = useState(false);
   const [hasUnread, setHasUnread] = useState(true);
   const dropdownRef = useRef(null);
@@ -35,8 +35,13 @@ export default function Topbar({ title, subtitle }) {
   return (
     <header className="topbar">
       <div className="topbar-left">
-        <h1 className="topbar-title">{title}</h1>
-        {subtitle && <p className="topbar-subtitle">{subtitle}</p>}
+        <button className="mobile-menu-btn" onClick={toggleSidebar} aria-label="Toggle Menu">
+          <Menu size={20} />
+        </button>
+        <div>
+          <h1 className="topbar-title">{title}</h1>
+          {subtitle && <p className="topbar-subtitle">{subtitle}</p>}
+        </div>
       </div>
 
       <div className="topbar-right">

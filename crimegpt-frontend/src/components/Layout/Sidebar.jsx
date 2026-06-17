@@ -29,6 +29,12 @@ export default function Sidebar() {
     navigate('/login');
   };
 
+  const handleNavItemClick = () => {
+    if (window.innerWidth <= 768 && sidebarOpen) {
+      toggleSidebar();
+    }
+  };
+
   return (
     <aside className={`sidebar ${sidebarOpen ? 'open' : 'collapsed'}`}>
       {/* Logo */}
@@ -54,6 +60,7 @@ export default function Sidebar() {
             end={path === '/'}
             className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
             title={!sidebarOpen ? t(labelKey) : undefined}
+            onClick={handleNavItemClick}
           >
             <Icon size={18} />
             {sidebarOpen && <span>{t(labelKey)}</span>}
@@ -67,6 +74,7 @@ export default function Sidebar() {
           to="/settings"
           className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
           title={!sidebarOpen ? t('settings') : undefined}
+          onClick={handleNavItemClick}
         >
           <Settings size={18} />
           {sidebarOpen && <span>{t('settings')}</span>}
@@ -84,7 +92,7 @@ export default function Sidebar() {
           </div>
         )}
 
-        <button className="nav-item logout-btn" onClick={handleLogout} title={!sidebarOpen ? t('logout') : undefined}>
+        <button className="nav-item logout-btn" onClick={() => { handleNavItemClick(); handleLogout(); }} title={!sidebarOpen ? t('logout') : undefined}>
           <LogOut size={18} />
           {sidebarOpen && <span>{t('logout')}</span>}
           {!sidebarOpen && <div className="tooltip">{t('logout')}</div>}
