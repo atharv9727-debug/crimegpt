@@ -23,10 +23,17 @@ function ProtectedRoute({ children }) {
 
 export default function App() {
   const language = useStore(s => s.language);
+  const { isAuthenticated, initializeData } = useStore();
 
   useEffect(() => {
     i18n.changeLanguage(language);
   }, [language]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      initializeData();
+    }
+  }, [isAuthenticated, initializeData]);
 
   return (
     <BrowserRouter>

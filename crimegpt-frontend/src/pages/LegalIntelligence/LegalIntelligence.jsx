@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Brain, Zap, BookOpen, Scale, AlertCircle, Copy, ExternalLink } from 'lucide-react';
 import toast from 'react-hot-toast';
+import useStore from '../../store/useStore';
 import { legalSections, landmarkJudgments } from '../../data/mockData';
 import './LegalIntelligence.css';
 
 export default function LegalIntelligence() {
+  const { analyzeNarrative } = useStore();
   const [narrative, setNarrative] = useState('');
   const [analyzing, setAnalyzing] = useState(false);
   const [results, setResults] = useState(null);
@@ -17,30 +19,19 @@ export default function LegalIntelligence() {
     }
     setAnalyzing(true);
     setResults(null);
-    await new Promise(r => setTimeout(r, 2200));
-
-    const text = narrative.toLowerCase();
-    let suggested = [];
-    if (text.includes('assault') || text.includes('beat') || text.includes('hurt')) suggested.push(...(legalSections.assault || []));
-    if (text.includes('snatch') || text.includes('rob') || text.includes('theft') || text.includes('chain') || text.includes('steal')) suggested.push(...(legalSections.robbery || []));
-    if (text.includes('murder') || text.includes('kill') || text.includes('death') || text.includes('shot')) suggested.push(...(legalSections.murder || []));
-    if (text.includes('fraud') || text.includes('cheat') || text.includes('otp') || text.includes('bank') || text.includes('online')) suggested.push(...(legalSections.fraud || []));
-    if (text.includes('drug') || text.includes('heroin') || text.includes('narcotic') || text.includes('ganja') || text.includes('mdma')) suggested.push(...(legalSections.drugs || []));
-    if (text.includes('kidnap') || text.includes('abduct') || text.includes('ransom')) suggested.push(...(legalSections.kidnapping || []));
-    if (text.includes('domestic') || text.includes('husband') || text.includes('wife') || text.includes('cruelty') || text.includes('harassment')) suggested.push(...(legalSections.domestic_violence || []));
-
-    const unique = suggested.filter((v, i, a) => a.findIndex(x => x.code === v.code) === i);
-
-    const relevantJudgments = landmarkJudgments.filter(j =>
-      text.includes(j.relevance) ||
-      (text.includes('arrest') && j.relevance === 'arrest') ||
-      (text.includes('bail') && j.relevance === 'remand') ||
-      (text.includes('evidence') && j.relevance === 'evidence')
-    );
-
-    setResults({ sections: unique, judgments: relevantJudgments.length > 0 ? relevantJudgments : landmarkJudgments.slice(0, 3) });
-    setAnalyzing(false);
-    toast.success(`Analysis complete — ${unique.length} sections found!`);
+    try {
+      const data = await analyzeNarrative(narrative);
+      const unique = data.sections || [];
+      setResults({
+        sections: unique,
+        judgments: data.judgments || [],
+      });
+      toast.success(`Analysis complete — ${unique.length} sections found!`);
+    } catch (err) {
+      toast.error(err.message || 'Failed to analyze narrative.');
+    } finally {
+      setAnalyzing(false);
+    }
   };
 
   const copy = (text) => {

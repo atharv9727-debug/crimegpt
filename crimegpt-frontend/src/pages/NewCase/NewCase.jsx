@@ -23,7 +23,7 @@ const STEPS = [
 export default function NewCase() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { addCase, addAuditEntry } = useStore();
+  const { addCase, addAuditEntry, analyzeNarrative } = useStore();
 
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -85,31 +85,23 @@ export default function NewCase() {
     evidenceItems: f.evidenceItems.map((e, idx) => idx === i ? { ...e, [key]: val } : e)
   }));
 
-  const analyzeNarrative = async () => {
+  const handleAnalyzeNarrative = async () => {
     if (!form.narrative.trim()) {
       toast.error('Please enter an incident narrative first.');
       return;
     }
     setAiAnalyzing(true);
-    await new Promise(r => setTimeout(r, 1800));
-
-    // Keyword-based section suggestion
-    const text = form.narrative.toLowerCase();
-    let suggested = [];
-    if (text.includes('assault') || text.includes('beat') || text.includes('hurt')) suggested.push(...(legalSections.assault || []));
-    if (text.includes('snatch') || text.includes('rob') || text.includes('theft') || text.includes('chain')) suggested.push(...(legalSections.robbery || []));
-    if (text.includes('murder') || text.includes('kill') || text.includes('death')) suggested.push(...(legalSections.murder || []));
-    if (text.includes('fraud') || text.includes('cheat') || text.includes('otp') || text.includes('bank')) suggested.push(...(legalSections.fraud || []));
-    if (text.includes('drug') || text.includes('heroin') || text.includes('narcotic') || text.includes('ganja')) suggested.push(...(legalSections.drugs || []));
-    if (text.includes('kidnap') || text.includes('abduct')) suggested.push(...(legalSections.kidnapping || []));
-    if (text.includes('domestic') || text.includes('husband') || text.includes('wife') || text.includes('cruelty')) suggested.push(...(legalSections.domestic_violence || []));
-
-    // Dedup
-    const unique = suggested.filter((v, i, a) => a.findIndex(x => x.code === v.code) === i);
-    setForm(f => ({ ...f, suggestedSections: unique, selectedSections: unique.map(s => s.code) }));
-    setAiAnalyzing(false);
-    toast.success(`AI suggested ${unique.length} applicable sections!`);
-    setStep(5);
+    try {
+      const data = await analyzeNarrative(form.narrative);
+      const unique = data.sections || [];
+      setForm(f => ({ ...f, suggestedSections: unique, selectedSections: unique.map(s => s.code) }));
+      toast.success(`AI suggested ${unique.length} applicable sections!`);
+      setStep(5);
+    } catch (err) {
+      toast.error(err.message || 'Failed to analyze narrative.');
+    } finally {
+      setAiAnalyzing(false);
+    }
   };
 
   const handleSubmit = async () => {
@@ -152,7 +144,7 @@ export default function NewCase() {
       case 0: return <CaseInfoStep form={form} set={set} />;
       case 1: return <ComplainantStep form={form} set={set} />;
       case 2: return <AccusedStep form={form} addAccused={addAccused} removeAccused={removeAccused} updateAccused={updateAccused} />;
-      case 3: return <NarrativeStep form={form} set={set} analyzeNarrative={analyzeNarrative} aiAnalyzing={aiAnalyzing} />;
+      case 3: return <NarrativeStep form={form} set={set} analyzeNarrative={handleAnalyzeNarrative} aiAnalyzing={aiAnalyzing} />;
       case 4: return <EvidenceStep form={form} addEvidence={addEvidence} removeEvidence={removeEvidence} updateEvidence={updateEvidence} />;
       case 5: return <SectionsStep form={form} setForm={setForm} />;
       default: return null;
