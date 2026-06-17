@@ -87,7 +87,7 @@ export default function NewCase() {
 
   const handleAnalyzeNarrative = async () => {
     if (!form.narrative.trim()) {
-      toast.error('Please enter an incident narrative first.');
+      toast.error(t('enterNarrativeError'));
       return;
     }
     setAiAnalyzing(true);
@@ -95,7 +95,7 @@ export default function NewCase() {
       const data = await analyzeNarrative(form.narrative);
       const unique = data.sections || [];
       setForm(f => ({ ...f, suggestedSections: unique, selectedSections: unique.map(s => s.code) }));
-      toast.success(`AI suggested ${unique.length} applicable sections!`);
+      toast.success(t('aiSuggestedSuccess', { count: unique.length }));
       setStep(5);
     } catch (err) {
       toast.error(err.message || 'Failed to analyze narrative.');
@@ -106,7 +106,7 @@ export default function NewCase() {
 
   const handleSubmit = async () => {
     if (!form.firNumber || !form.complainantName || !form.narrative) {
-      toast.error('Please fill FIR number, complainant name, and incident narrative.');
+      toast.error(t('fillRequiredFieldsError'));
       return;
     }
     setLoading(true);
@@ -135,7 +135,7 @@ export default function NewCase() {
     });
 
     addAuditEntry({ action: `Case ${newId} created (FIR ${form.firNumber})`, officer: form.officer, type: 'create' });
-    toast.success('Case registered successfully!');
+    toast.success(t('caseRegisteredSuccess'));
     navigate(`/cases/${newId}`);
   };
 
@@ -212,23 +212,23 @@ function CaseInfoStep({ form, set, t }) {
       <div className="form-grid">
         <div className="form-group">
           <label>{t('firNumberLabel')}</label>
-          <input value={form.firNumber} onChange={e => set('firNumber', e.target.value)} placeholder="e.g. 45/2024" />
+          <input value={form.firNumber} onChange={e => set('firNumber', e.target.value)} placeholder={t('firNumberPlaceholder')} />
         </div>
         <div className="form-group">
           <label>{t('crimeTypeLabel')}</label>
-          <input value={form.crimeType} onChange={e => set('crimeType', e.target.value)} placeholder="e.g. Robbery, Assault" />
+          <input value={form.crimeType} onChange={e => set('crimeType', e.target.value)} placeholder={t('crimeTypePlaceholder')} />
         </div>
         <div className="form-group">
           <label>{t('policeStationLabel')}</label>
-          <input value={form.station} onChange={e => set('station', e.target.value)} placeholder="e.g. Maninagar PS" />
+          <input value={form.station} onChange={e => set('station', e.target.value)} placeholder={t('policeStationPlaceholder')} />
         </div>
         <div className="form-group">
           <label>{t('districtLabel')}</label>
-          <input value={form.district} onChange={e => set('district', e.target.value)} placeholder="e.g. Ahmedabad City" />
+          <input value={form.district} onChange={e => set('district', e.target.value)} placeholder={t('districtPlaceholder')} />
         </div>
         <div className="form-group">
           <label>{t('investigatingOfficerLabel')}</label>
-          <input value={form.officer} onChange={e => set('officer', e.target.value)} placeholder="e.g. PI Amit Solanki" />
+          <input value={form.officer} onChange={e => set('officer', e.target.value)} placeholder={t('officerPlaceholder')} />
         </div>
         <div className="form-group">
           <label>{t('dateOfOffenseLabel')}</label>
@@ -240,7 +240,7 @@ function CaseInfoStep({ form, set, t }) {
         </div>
         <div className="form-group">
           <label>{t('placeOfOffenseLabel')}</label>
-          <input value={form.offensePlace} onChange={e => set('offensePlace', e.target.value)} placeholder="e.g. Near Maninagar Market" />
+          <input value={form.offensePlace} onChange={e => set('offensePlace', e.target.value)} placeholder={t('placePlaceholder')} />
         </div>
       </div>
     </div>
@@ -255,23 +255,23 @@ function ComplainantStep({ form, set, t }) {
       <div className="form-grid">
         <div className="form-group full">
           <label>{t('fullNameLabel')}</label>
-          <input value={form.complainantName} onChange={e => set('complainantName', e.target.value)} placeholder="Full name" />
+          <input value={form.complainantName} onChange={e => set('complainantName', e.target.value)} placeholder={t('fullNamePlaceholder')} />
         </div>
         <div className="form-group">
           <label>{t('ageLabel')}</label>
-          <input type="number" value={form.complainantAge} onChange={e => set('complainantAge', e.target.value)} placeholder="Age" />
+          <input type="number" value={form.complainantAge} onChange={e => set('complainantAge', e.target.value)} placeholder={t('agePlaceholder')} />
         </div>
         <div className="form-group">
           <label>{t('phoneNumberLabel')}</label>
-          <input value={form.complainantPhone} onChange={e => set('complainantPhone', e.target.value)} placeholder="+91 XXXXX XXXXX" />
+          <input value={form.complainantPhone} onChange={e => set('complainantPhone', e.target.value)} placeholder={t('phonePlaceholder')} />
         </div>
         <div className="form-group">
           <label>{t('occupationLabel')}</label>
-          <input value={form.complainantOccupation} onChange={e => set('complainantOccupation', e.target.value)} placeholder="e.g. Shopkeeper" />
+          <input value={form.complainantOccupation} onChange={e => set('complainantOccupation', e.target.value)} placeholder={t('occupationPlaceholder')} />
         </div>
         <div className="form-group full">
           <label>{t('residentialAddressLabel')}</label>
-          <textarea value={form.complainantAddress} onChange={e => set('complainantAddress', e.target.value)} placeholder="Full residential address" rows={3} />
+          <textarea value={form.complainantAddress} onChange={e => set('complainantAddress', e.target.value)} placeholder={t('addressPlaceholder')} rows={3} />
         </div>
       </div>
     </div>
@@ -294,28 +294,28 @@ function AccusedStep({ form, addAccused, removeAccused, updateAccused, t }) {
           <div className="form-grid">
             <div className="form-group">
               <label>{t('fullNameLabel')}</label>
-              <input value={a.name} onChange={e => updateAccused(i, 'name', e.target.value)} placeholder="Name or Unknown" />
+              <input value={a.name} onChange={e => updateAccused(i, 'name', e.target.value)} placeholder={t('accusedNamePlaceholder')} />
             </div>
             <div className="form-group">
               <label>{t('ageLabel')}</label>
-              <input value={a.age} onChange={e => updateAccused(i, 'age', e.target.value)} placeholder="e.g. 25" />
+              <input value={a.age} onChange={e => updateAccused(i, 'age', e.target.value)} placeholder={t('accusedAgePlaceholder')} />
             </div>
             <div className="form-group">
               <label>{t('statusLabel')}</label>
               <select value={a.status} onChange={e => updateAccused(i, 'status', e.target.value)}>
-                <option value="wanted">Wanted</option>
-                <option value="arrested">Arrested</option>
-                <option value="bailed">On Bail</option>
-                <option value="absconding">Absconding</option>
+                <option value="wanted">{t('wanted')}</option>
+                <option value="arrested">{t('arrested')}</option>
+                <option value="bailed">{t('bailed')}</option>
+                <option value="absconding">{t('absconding')}</option>
               </select>
             </div>
             <div className="form-group">
               <label>{t('identificationMarksLabel')}</label>
-              <input value={a.identification} onChange={e => updateAccused(i, 'identification', e.target.value)} placeholder="Physical description" />
+              <input value={a.identification} onChange={e => updateAccused(i, 'identification', e.target.value)} placeholder={t('accusedIdentificationPlaceholder')} />
             </div>
             <div className="form-group full">
               <label>{t('addressLabel')}</label>
-              <input value={a.address} onChange={e => updateAccused(i, 'address', e.target.value)} placeholder="Address if known" />
+              <input value={a.address} onChange={e => updateAccused(i, 'address', e.target.value)} placeholder={t('accusedAddressPlaceholder')} />
             </div>
           </div>
         </div>
@@ -335,13 +335,16 @@ function NarrativeStep({ form, set, analyzeNarrative, aiAnalyzing, t }) {
         <textarea
           value={form.narrative}
           onChange={e => set('narrative', e.target.value)}
-          placeholder="Describe the incident in detail: what happened, when, where, who was involved, what was the mode of operation, what injuries/loss occurred..."
+          placeholder={t('describeIncidentPlaceholder')}
           rows={12}
           className="narrative-textarea"
         />
       </div>
       <div className="narrative-actions">
-        <span className="word-count">{form.narrative.split(/\s+/).filter(Boolean).length} {form.narrative.split(/\s+/).filter(Boolean).length === 1 ? 'word' : 'words'}</span>
+        <span className="word-count">
+          {form.narrative.split(/\s+/).filter(Boolean).length}{' '}
+          {form.narrative.split(/\s+/).filter(Boolean).length === 1 ? t('word') : t('words')}
+        </span>
         <button
           className={`btn-ai ${aiAnalyzing ? 'analyzing' : ''}`}
           onClick={analyzeNarrative}
@@ -381,17 +384,17 @@ function EvidenceStep({ form, addEvidence, removeEvidence, updateEvidence, t }) 
           <div className="form-grid">
             <div className="form-group">
               <label>{t('itemDescriptionLabel')}</label>
-              <input value={e.item} onChange={ev => updateEvidence(i, 'item', ev.target.value)} placeholder="e.g. Mobile phone (Samsung)" />
+              <input value={e.item} onChange={ev => updateEvidence(i, 'item', ev.target.value)} placeholder={t('evidenceItemPlaceholder')} />
             </div>
             <div className="form-group">
               <label>{t('evidenceTypeLabel')}</label>
               <select value={e.type} onChange={ev => updateEvidence(i, 'type', ev.target.value)}>
-                {TYPES.map(t => <option key={t}>{t}</option>)}
+                {TYPES.map(type => <option key={type} value={type}>{t(type.toLowerCase())}</option>)}
               </select>
             </div>
             <div className="form-group full">
               <label>{t('detailsNotesLabel')}</label>
-              <input value={e.description} onChange={ev => updateEvidence(i, 'description', ev.target.value)} placeholder="Serial numbers, condition, where found, etc." />
+              <input value={e.description} onChange={ev => updateEvidence(i, 'description', ev.target.value)} placeholder={t('evidenceDetailsPlaceholder')} />
             </div>
           </div>
         </div>

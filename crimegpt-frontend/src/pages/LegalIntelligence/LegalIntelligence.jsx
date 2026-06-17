@@ -16,7 +16,7 @@ export default function LegalIntelligence() {
 
   const analyze = async () => {
     if (!narrative.trim() || narrative.split(' ').length < 5) {
-      toast.error('Please enter a more detailed narrative (at least 5 words).');
+      toast.error(t('enterDetailedNarrativeError'));
       return;
     }
     setAnalyzing(true);
@@ -28,7 +28,7 @@ export default function LegalIntelligence() {
         sections: unique,
         judgments: data.judgments || [],
       });
-      toast.success(`Analysis complete — ${unique.length} sections found!`);
+      toast.success(t('aiSuggestedSuccess', { count: unique.length }));
     } catch (err) {
       toast.error(err.message || 'Failed to analyze narrative.');
     } finally {
@@ -38,7 +38,7 @@ export default function LegalIntelligence() {
 
   const copy = (text) => {
     navigator.clipboard.writeText(text);
-    toast.success('Copied to clipboard!');
+    toast.success(t('copiedToClipboardSuccess'));
   };
 
   const severityColor = { critical: '#ef4444', high: '#f59e0b', medium: '#3b82f6', procedural: '#8b5cf6' };
@@ -60,9 +60,9 @@ export default function LegalIntelligence() {
         />
         <div className="legal-input-footer">
           <div className="input-stats">
-            <span>{narrative.split(/\s+/).filter(Boolean).length} {narrative.split(/\s+/).filter(Boolean).length === 1 ? 'word' : 'words'}</span>
+            <span>{narrative.split(/\s+/).filter(Boolean).length} {narrative.split(/\s+/).filter(Boolean).length === 1 ? t('word') : t('words')}</span>
             <span>·</span>
-            <span>{narrative.length} {narrative.length === 1 ? 'character' : 'characters'}</span>
+            <span>{narrative.length} {narrative.length === 1 ? t('character') : t('characters')}</span>
           </div>
           <button
             className={`btn-analyze ${analyzing ? 'analyzing' : ''}`}
@@ -164,16 +164,16 @@ export default function LegalIntelligence() {
       {!results && !analyzing && (
         <div className="legal-info-cards">
           {[
-            { icon: '⚖️', title: 'BNS 2023', desc: 'Bharatiya Nyaya Sanhita — replaces IPC. 358 sections covering all criminal offences.' },
-            { icon: '📋', title: 'BNSS 2023', desc: 'Bharatiya Nagarik Suraksha Sanhita — replaces CrPC. 531 sections for criminal procedure.' },
-            { icon: '📄', title: 'BSA 2023', desc: 'Bharatiya Sakshya Adhiniyam — replaces Indian Evidence Act. 170 sections for evidence.' },
-            { icon: '💊', title: 'NDPS Act', desc: 'Narcotic Drugs and Psychotropic Substances Act, 1985. Key sections for drug offences.' },
+            { icon: '⚖️', titleKey: 'bnsTitle', descKey: 'bnsDesc' },
+            { icon: '📋', titleKey: 'bnssTitle', descKey: 'bnssDesc' },
+            { icon: '📄', titleKey: 'bsaTitle', descKey: 'bsaDesc' },
+            { icon: '💊', titleKey: 'ndpsTitle', descKey: 'ndpsDesc' },
           ].map(card => (
-            <div key={card.title} className="info-card">
+            <div key={card.titleKey} className="info-card">
               <span className="info-card-icon">{card.icon}</span>
               <div>
-                <h4 className="info-card-title">{card.title}</h4>
-                <p className="info-card-desc">{card.desc}</p>
+                <h4 className="info-card-title">{t(card.titleKey)}</h4>
+                <p className="info-card-desc">{t(card.descKey)}</p>
               </div>
             </div>
           ))}

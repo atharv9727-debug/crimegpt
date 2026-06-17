@@ -283,7 +283,7 @@ IO Signature: ${c?.officer || '_______________'}
 
 export default function Documents() {
   const { t } = useTranslation();
-  const { cases, addDocument, addAuditEntry, language } = useStore();
+  const { cases, addDocument, addAuditEntry, language, officer } = useStore();
   const [selectedCase, setSelectedCase] = useState('');
   const [selectedDoc, setSelectedDoc] = useState(null);
   const [previewContent, setPreviewContent] = useState('');
@@ -293,13 +293,59 @@ export default function Documents() {
 
   const activeCase = cases.find(c => c.id === selectedCase);
 
+  const getDocTitle = (doc) => {
+    if (language === 'hi') return doc.titleHi;
+    if (language === 'gu') return doc.titleGu;
+    return doc.title;
+  };
+
+  const getDocDesc = (doc) => {
+    const key = 'description' + doc.id.charAt(0).toUpperCase() + doc.id.slice(1);
+    return t(key);
+  };
+
+  const getFieldLabel = (field) => {
+    const map = {
+      'FIR Number': t('caseNumber'),
+      'Complainant': t('complainant'),
+      'Accused': t('accused'),
+      'Sections': t('sectionsStep'),
+      'Date': t('date'),
+      'Station': t('station'),
+      'Accused Name': t('accused'),
+      'Arrest Date': t('date'),
+      'Days Requested': t('daysRequested'),
+      'Reasons': t('reasons'),
+      'Court': t('court'),
+      'Items List': t('itemsList'),
+      'Seizure Date': t('date'),
+      'Location': t('placeOfOffenseLabel'),
+      'Panchas': t('panchas'),
+      'Officer': t('officer'),
+      'Court Name': t('court'),
+      'Date of Production': t('date'),
+      'Case Number': t('caseNumber'),
+      'Accused Details': t('accusedDetails'),
+      'Arrest Time': t('timeOfOffenseLabel'),
+      'Place': t('placeOfOffenseLabel'),
+      'Articles': t('evidenceStep'),
+      'Accused Photo': t('accusedPhoto'),
+      'Identification Date': t('date'),
+      'Witnesses': t('witnesses'),
+      'Magistrate': t('magistrate'),
+      'Officer Name': t('officer'),
+      'Hospital': t('hospital'),
+    };
+    return map[field] || field;
+  };
+
   const filteredDocs = DOC_TYPES.filter(d =>
-    d.title.toLowerCase().includes(searchQ.toLowerCase()) ||
-    d.description.toLowerCase().includes(searchQ.toLowerCase())
+    getDocTitle(d).toLowerCase().includes(searchQ.toLowerCase()) ||
+    getDocDesc(d).toLowerCase().includes(searchQ.toLowerCase())
   );
 
   const handleGenerate = async (doc) => {
-    if (!selectedCase) { toast.error('Please select a case first.'); return; }
+    if (!selectedCase) { toast.error(t('selectCaseFirstError')); return; }
     setGenerating(doc.id);
     await new Promise(r => setTimeout(r, 1200));
     const fn = TEMPLATES[doc.id];
@@ -307,9 +353,9 @@ export default function Documents() {
     setPreviewContent(content);
     setSelectedDoc(doc);
     setShowPreview(true);
-    addDocument({ type: doc.id, title: doc.title, caseId: selectedCase, content });
-    addAuditEntry({ action: `${doc.title} generated for case ${selectedCase}`, officer: 'Current Officer', type: 'generate' });
-    toast.success(`${doc.title} generated!`);
+    addDocument({ type: doc.id, title: getDocTitle(doc), caseId: selectedCase, content });
+    addAuditEntry({ action: `${getDocTitle(doc)} generated for case ${selectedCase}`, officer: officer?.name || 'Current Officer', type: 'generate' });
+    toast.success(t('docGeneratedSuccess', { title: getDocTitle(doc) }));
     setGenerating(null);
   };
 
@@ -321,13 +367,7 @@ export default function Documents() {
     a.download = `${selectedDoc?.id}_${selectedCase}.txt`;
     a.click();
     URL.revokeObjectURL(url);
-    toast.success('Document downloaded!');
-  };
-
-  const getDocTitle = (doc) => {
-    if (language === 'hi') return doc.titleHi;
-    if (language === 'gu') return doc.titleGu;
-    return doc.title;
+    toast.success(t('docDownloadedSuccess'));
   };
 
   const colorMap = { blue: '#3b82f6', green: '#22c55e', orange: '#f59e0b', purple: '#8b5cf6', cyan: '#06b6d4', violet: '#7c3aed', red: '#ef4444' };
@@ -371,12 +411,12 @@ export default function Documents() {
               <span className="doc-icon">{doc.icon}</span>
               <div className="doc-info">
                 <h3 className="doc-title">{getDocTitle(doc)}</h3>
-                <p className="doc-desc">{doc.description}</p>
+                <p className="doc-desc">{getDocDesc(doc)}</p>
               </div>
             </div>
             <div className="doc-fields">
               {doc.fields.slice(0, 4).map(f => (
-                <span key={f} className="doc-field">{f}</span>
+                <span key={f} className="doc-field">{getFieldLabel(f)}</span>
               ))}
               {doc.fields.length > 4 && <span className="doc-field doc-field-more">+{doc.fields.length - 4}</span>}
             </div>
@@ -400,7 +440,7 @@ export default function Documents() {
             <div className="preview-header">
               <div>
                 <h3>{getDocTitle(selectedDoc)}</h3>
-                <p>{t('caseSelectLabel')} {selectedCase} · Generated {new Date().toLocaleString()}</p>
+                <p>{t('caseSelectLabel')} {selectedCase} · {t('generatedAt')}: {new Date().toLocaleString()}</p>
               </div>
               <div className="preview-actions">
                 <button className="preview-btn" onClick={handleDownload} title="Download TXT">

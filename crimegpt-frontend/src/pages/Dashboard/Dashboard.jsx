@@ -80,10 +80,10 @@ export default function Dashboard() {
 
       {/* Stats */}
       <div className="stats-grid">
-        <StatCard icon={Folder} label={t('activeCases')} value={stats.activeCases} color="blue" trend="2 this week" />
-        <StatCard icon={FileText} label={t('totalDocuments')} value={stats.totalDocuments} color="purple" trend="12 this week" />
+        <StatCard icon={Folder} label={t('activeCases')} value={stats.activeCases} color="blue" trend={t('trendTwoThisWeek')} />
+        <StatCard icon={FileText} label={t('totalDocuments')} value={stats.totalDocuments} color="purple" trend={t('trendTwelveThisWeek')} />
         <StatCard icon={AlertTriangle} label={t('pendingArrests')} value={stats.pendingArrests} color="orange" />
-        <StatCard icon={Brain} label={t('sectionsSuggested')} value={stats.sectionsSuggested} color="cyan" trend="AI powered" />
+        <StatCard icon={Brain} label={t('sectionsSuggested')} value={stats.sectionsSuggested} color="cyan" trend={t('trendAiPowered')} />
       </div>
 
       {/* Main grid */}

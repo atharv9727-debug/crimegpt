@@ -102,7 +102,7 @@ export default function CaseDetail() {
                   <span className="ev-id">{e.id}</span>
                   <div className="ev-info">
                     <p className="ev-item">{e.item}</p>
-                    <span className="ev-type">{e.type}</span>
+                    <span className="ev-type">{t(e.type.toLowerCase())}</span>
                   </div>
                   <span className="ev-date">{e.seized}</span>
                 </div>

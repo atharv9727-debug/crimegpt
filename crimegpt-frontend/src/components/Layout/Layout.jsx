@@ -9,6 +9,7 @@ import './Layout.css';
 const PAGE_TITLES = {
   '/': { titleKey: 'dashboardTitle', subtitleKey: 'dashboardSubtitle' },
   '/new-case': { titleKey: 'newCaseTitle', subtitleKey: 'newCaseSubtitle' },
+  '/cases': { titleKey: 'caseDetailsTitle', subtitleKey: 'caseDetailsSubtitle' },
   '/case-diary': { titleKey: 'caseDiaryTitle', subtitleKey: 'caseDiarySubtitle' },
   '/documents': { titleKey: 'documentsTitle', subtitleKey: 'documentsSubtitle' },
   '/legal-intel': { titleKey: 'legalIntelTitle', subtitleKey: 'legalIntelSubtitle' },

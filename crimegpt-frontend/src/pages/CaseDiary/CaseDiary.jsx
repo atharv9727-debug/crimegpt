@@ -24,7 +24,7 @@ export default function CaseDiary() {
   const entries = activeCase?.diaryEntries || [];
 
   const handleAddEntry = () => {
-    if (!entryForm.action.trim()) { toast.error('Please describe the action taken.'); return; }
+    if (!entryForm.action.trim()) { toast.error(t('describeActionError')); return; }
     const now = new Date();
     addDiaryEntry(selectedCase, {
       date: now.toISOString().split('T')[0],
@@ -35,7 +35,7 @@ export default function CaseDiary() {
     });
     setEntryForm({ action: '', type: 'investigation', officer: officer?.name || '' });
     setShowAddEntry(false);
-    toast.success('Diary entry added!');
+    toast.success(t('diaryEntryAddedSuccess'));
   };
 
   const getTypeInfo = (type) => ENTRY_TYPES.find(t => t.value === type) || ENTRY_TYPES[4];
