@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Bell, Globe, Search } from 'lucide-react';
+import { Globe, Search, Zap } from 'lucide-react';
 import useStore from '../../store/useStore';
 import './Topbar.css';
 
@@ -13,6 +13,19 @@ const LANGUAGES = [
 export default function Topbar({ title, subtitle }) {
   const { t, i18n } = useTranslation();
   const { language, setLanguage, stats } = useStore();
+  const [showNotif, setShowNotif] = useState(false);
+  const [hasUnread, setHasUnread] = useState(true);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setShowNotif(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleLang = (code) => {
     setLanguage(code);
@@ -44,10 +57,41 @@ export default function Topbar({ title, subtitle }) {
         </div>
 
         {/* Notifications */}
-        <button className="icon-btn" aria-label="Notifications">
-          <Bell size={18} />
-          <span className="notif-dot" aria-hidden="true" />
-        </button>
+        <div className="notif-container" ref={dropdownRef}>
+          <button
+            className={`icon-btn ${showNotif ? 'active' : ''}`}
+            aria-label="Notifications"
+            onClick={() => {
+              setShowNotif(!showNotif);
+              setHasUnread(false);
+            }}
+          >
+            <Zap size={18} className="main-logo-icon" />
+            {hasUnread && <span className="notif-dot" aria-hidden="true" />}
+          </button>
+
+          {showNotif && (
+            <div className="notif-dropdown">
+              <div className="notif-header">
+                <h3>{t('notifications')}</h3>
+                <button className="clear-btn" onClick={() => setShowNotif(false)}>{t('close')}</button>
+              </div>
+              <div className="notif-list">
+                {[
+                  { text: t('activityChargesheetGenerated', { caseId: 'CR-2024-0878' }), time: t('twoHoursAgo') },
+                  { text: t('activityAccusedArrested', { name: 'Raju Prasad', caseId: 'CR-2024-0892' }), time: t('fiveHoursAgo') },
+                  { text: t('activityMedicalLetterPending', { caseId: 'CR-2024-0885' }), time: t('oneDayAgo') },
+                  { text: t('activityAiSectionsSuggested', { count: 3, caseId: 'CR-2024-0891' }), time: t('twoDaysAgo') },
+                ].map((item, i) => (
+                  <div key={i} className="notif-item">
+                    <p className="notif-text">{item.text}</p>
+                    <span className="notif-time">{item.time}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* Quick stat */}
         <div className="topbar-stat">
