@@ -153,20 +153,22 @@ export default function NewCase() {
 
   return (
     <div className="new-case fade-in">
-      {/* Stepper */}
       <div className="stepper">
         {STEPS.map((s, i) => (
-          <button
-            key={s.id}
-            className={`step-item ${i === step ? 'active' : ''} ${i < step ? 'done' : ''}`}
-            onClick={() => setStep(i)}
-          >
-            <div className="step-icon">
-              {i < step ? '✓' : <s.icon size={14} />}
-            </div>
-            <span className="step-label">{s.label}</span>
-            {i < STEPS.length - 1 && <div className="step-connector" />}
-          </button>
+          <React.Fragment key={s.id}>
+            <button
+              className={`step-item ${i === step ? 'active' : ''} ${i < step ? 'done' : ''}`}
+              onClick={() => setStep(i)}
+            >
+              <div className="step-icon">
+                {i < step ? '✓' : <s.icon size={12} />}
+              </div>
+              <span className="step-label">{s.label}</span>
+            </button>
+            {i < STEPS.length - 1 && (
+              <div className={`step-connector ${i < step ? 'done' : ''}`} />
+            )}
+          </React.Fragment>
         ))}
       </div>
 

@@ -7,6 +7,7 @@ import {
   Zap
 } from 'lucide-react';
 import useStore from '../../store/useStore';
+import logoImg from '../../assets/logo.png';
 import './Sidebar.css';
 
 const navItems = [
@@ -32,10 +33,7 @@ export default function Sidebar() {
     <aside className={`sidebar ${sidebarOpen ? 'open' : 'collapsed'}`}>
       {/* Logo */}
       <div className="sidebar-logo">
-        <div className="logo-icon">
-          <Shield size={20} />
-          <Zap size={10} className="logo-zap" />
-        </div>
+        <img src={logoImg} alt="CrimeGPT Logo" className="logo-img-asset" />
         {sidebarOpen && (
           <div className="logo-text">
             <span className="logo-name">CrimeGPT</span>

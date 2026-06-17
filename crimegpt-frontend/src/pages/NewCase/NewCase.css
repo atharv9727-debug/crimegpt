@@ -4,45 +4,55 @@
 .stepper {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
-  padding: 16px 20px;
+  padding: 18px 24px;
   overflow-x: auto;
-  gap: 0;
+  gap: 12px;
+  margin-bottom: 8px;
 }
 .step-item {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   background: transparent;
   color: var(--text-muted);
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   transition: var(--transition);
   white-space: nowrap;
   position: relative;
   flex-shrink: 0;
 }
 .step-item:hover { color: var(--text-secondary); }
-.step-item.active { color: #60a5fa; }
+.step-item.active { color: #60a5fa; text-shadow: 0 0 10px rgba(96,165,250,0.25); }
 .step-item.done { color: #4ade80; }
 .step-icon {
-  width: 28px; height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   border: 1.5px solid currentColor;
   display: flex; align-items: center; justify-content: center;
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 700;
   transition: var(--transition);
 }
-.step-item.active .step-icon { background: rgba(59,130,246,0.15); border-color: #60a5fa; }
-.step-item.done .step-icon { background: rgba(34,197,94,0.12); border-color: #4ade80; }
-.step-label { font-size: 12px; }
+.step-item.active .step-icon { background: rgba(59,130,246,0.12); border-color: #60a5fa; box-shadow: 0 0 10px rgba(96,165,250,0.2); }
+.step-item.done .step-icon { background: rgba(34,197,94,0.1); border-color: #4ade80; }
+.step-label { font-size: 13px; }
 .step-connector {
-  width: 32px; height: 1px;
+  flex: 1;
+  height: 2px;
   background: var(--border-subtle);
-  margin: 0 8px;
-  flex-shrink: 0;
+  margin: 0 16px;
+  min-width: 20px;
+  transition: background 0.3s ease;
+}
+.step-connector.done {
+  background: #4ade80;
+  box-shadow: 0 0 8px rgba(74,222,128,0.25);
 }
 
 /* Card */

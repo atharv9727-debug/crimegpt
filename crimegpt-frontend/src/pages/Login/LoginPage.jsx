@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Shield, Zap, Eye, EyeOff, Lock, User, AlertCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import useStore from '../../store/useStore';
+import logoImg from '../../assets/logo.png';
 import './LoginPage.css';
 
 export default function LoginPage() {
@@ -46,8 +47,7 @@ export default function LoginPage() {
         {/* Brand */}
         <div className="login-brand">
           <div className="brand-logo">
-            <Shield size={32} />
-            <Zap size={14} className="brand-zap" />
+            <img src={logoImg} className="brand-logo-img" alt="CrimeGPT Logo" />
           </div>
           <div>
             <h1 className="brand-name">CrimeGPT</h1>

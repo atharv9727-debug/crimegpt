@@ -24,24 +24,14 @@
   min-height: 64px;
   position: relative;
 }
-.logo-icon {
-  position: relative;
+.logo-img-asset {
   width: 36px;
   height: 36px;
-  background: linear-gradient(135deg, #3b82f6, #6366f1);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.45);
   flex-shrink: 0;
-  box-shadow: 0 0 20px rgba(59,130,246,0.35);
-}
-.logo-zap {
-  position: absolute;
-  top: 3px;
-  right: 3px;
-  color: #fbbf24;
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
 }
 .logo-text { flex: 1; overflow: hidden; }
 .logo-name { display: block; font-size: 15px; font-weight: 800; color: var(--text-primary); letter-spacing: -0.02em; }
