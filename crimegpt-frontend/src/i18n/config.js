@@ -195,7 +195,7 @@ const resources = {
       noEvidenceRecorded: 'No evidence recorded.',
       caseDiaryTitleCount: 'Case Diary ({{count}} entries)',
       fullDiaryBtn: 'Full Diary',
-      noDiaryEntriesYet: 'No diary entries yet.',
+      noDiaryEntriesYetDetail: 'No diary entries yet.',
       // Settings Page
       officerProfile: 'Officer Profile',
       district: 'District',
@@ -433,7 +433,7 @@ const resources = {
       noEvidenceRecorded: 'कोई साक्ष्य दर्ज नहीं है।',
       caseDiaryTitleCount: 'केस डायरी ({{count}} प्रविष्टियां)',
       fullDiaryBtn: 'पूर्ण डायरी',
-      noDiaryEntriesYet: 'अभी तक कोई डायरी प्रविष्टि नहीं है।',
+      noDiaryEntriesYetDetail: 'अभी तक कोई डायरी प्रविष्टि नहीं है।',
       // Settings Page
       officerProfile: 'अधिकारी प्रोफ़ाइल',
       district: 'जिला',
@@ -671,7 +671,7 @@ const resources = {
       noEvidenceRecorded: 'કોઈ પુરાવા નોંધાયા નથી.',
       caseDiaryTitleCount: 'કેસ ડાયરી ({{count}} એન્ટ્રીઓ)',
       fullDiaryBtn: 'સંપૂર્ણ ડાયરી',
-      noDiaryEntriesYet: 'હજી સુધી કોઈ ડાયરી એન્ટ્રી નથી.',
+      noDiaryEntriesYetDetail: 'હજી સુધી કોઈ ડાયરી એન્ટ્રી નથી.',
       // Settings Page
       officerProfile: 'અધિકારી પ્રોફાઇલ',
       district: 'જિલ્લો',

@@ -136,7 +136,7 @@ export default function CaseDetail() {
               </div>
             ))}
             {(!c.diaryEntries || c.diaryEntries.length === 0) && (
-              <p className="cd-empty">{t('noDiaryEntriesYet')}</p>
+              <p className="cd-empty">{t('noDiaryEntriesYetDetail')}</p>
             )}
           </div>
         </div>
