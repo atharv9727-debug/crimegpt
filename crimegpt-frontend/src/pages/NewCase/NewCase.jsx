@@ -12,12 +12,12 @@ import { legalSections } from '../../data/mockData';
 import './NewCase.css';
 
 const STEPS = [
-  { id: 'case-info', label: 'Case Info', icon: Hash },
-  { id: 'complainant', label: 'Complainant', icon: User },
-  { id: 'accused', label: 'Accused', icon: Shield },
-  { id: 'narrative', label: 'Narrative', icon: FileText },
-  { id: 'evidence', label: 'Evidence', icon: Package },
-  { id: 'sections', label: 'Sections', icon: Brain },
+  { id: 'case-info', labelKey: 'caseInfoStep', icon: Hash },
+  { id: 'complainant', labelKey: 'complainantStep', icon: User },
+  { id: 'accused', labelKey: 'accusedStep', icon: Shield },
+  { id: 'narrative', labelKey: 'narrativeStep', icon: FileText },
+  { id: 'evidence', labelKey: 'evidenceStep', icon: Package },
+  { id: 'sections', labelKey: 'sectionsStep', icon: Brain },
 ];
 
 export default function NewCase() {
@@ -141,12 +141,12 @@ export default function NewCase() {
 
   const renderStep = () => {
     switch (step) {
-      case 0: return <CaseInfoStep form={form} set={set} />;
-      case 1: return <ComplainantStep form={form} set={set} />;
-      case 2: return <AccusedStep form={form} addAccused={addAccused} removeAccused={removeAccused} updateAccused={updateAccused} />;
-      case 3: return <NarrativeStep form={form} set={set} analyzeNarrative={handleAnalyzeNarrative} aiAnalyzing={aiAnalyzing} />;
-      case 4: return <EvidenceStep form={form} addEvidence={addEvidence} removeEvidence={removeEvidence} updateEvidence={updateEvidence} />;
-      case 5: return <SectionsStep form={form} setForm={setForm} />;
+      case 0: return <CaseInfoStep form={form} set={set} t={t} />;
+      case 1: return <ComplainantStep form={form} set={set} t={t} />;
+      case 2: return <AccusedStep form={form} addAccused={addAccused} removeAccused={removeAccused} updateAccused={updateAccused} t={t} />;
+      case 3: return <NarrativeStep form={form} set={set} analyzeNarrative={handleAnalyzeNarrative} aiAnalyzing={aiAnalyzing} t={t} />;
+      case 4: return <EvidenceStep form={form} addEvidence={addEvidence} removeEvidence={removeEvidence} updateEvidence={updateEvidence} t={t} />;
+      case 5: return <SectionsStep form={form} setForm={setForm} t={t} />;
       default: return null;
     }
   };
@@ -163,7 +163,7 @@ export default function NewCase() {
               <div className="step-icon">
                 {i < step ? '✓' : <s.icon size={12} />}
               </div>
-              <span className="step-label">{s.label}</span>
+              <span className="step-label">{t(s.labelKey)}</span>
             </button>
             {i < STEPS.length - 1 && (
               <div className={`step-connector ${i < step ? 'done' : ''}`} />
@@ -184,16 +184,16 @@ export default function NewCase() {
           onClick={() => setStep(s => Math.max(0, s - 1))}
           disabled={step === 0}
         >
-          Back
+          {t('backButton')}
         </button>
         <div className="case-nav-right">
           {step < STEPS.length - 1 ? (
             <button className="btn-primary" onClick={() => setStep(s => s + 1)}>
-              Next <ChevronRight size={16} />
+              {t('nextButton')} <ChevronRight size={16} />
             </button>
           ) : (
             <button className={`btn-primary ${loading ? 'loading' : ''}`} onClick={handleSubmit} disabled={loading}>
-              {loading ? <><span className="spinner-sm" />Saving...</> : <><Save size={16} />Register Case</>}
+              {loading ? <><span className="spinner-sm" />{t('savingLabel')}</> : <><Save size={16} />{t('registerCaseLabel')}</>}
             </button>
           )}
         </div>
@@ -204,42 +204,42 @@ export default function NewCase() {
 
 // Sub-steps
 
-function CaseInfoStep({ form, set }) {
+function CaseInfoStep({ form, set, t }) {
   return (
     <div className="form-step">
-      <h3 className="step-title">Case Information</h3>
-      <p className="step-desc">Basic FIR and case registration details</p>
+      <h3 className="step-title">{t('caseInformation')}</h3>
+      <p className="step-desc">{t('stepDescCaseInfo')}</p>
       <div className="form-grid">
         <div className="form-group">
-          <label>FIR Number *</label>
+          <label>{t('firNumberLabel')}</label>
           <input value={form.firNumber} onChange={e => set('firNumber', e.target.value)} placeholder="e.g. 45/2024" />
         </div>
         <div className="form-group">
-          <label>Crime Type</label>
+          <label>{t('crimeTypeLabel')}</label>
           <input value={form.crimeType} onChange={e => set('crimeType', e.target.value)} placeholder="e.g. Robbery, Assault" />
         </div>
         <div className="form-group">
-          <label>Police Station *</label>
+          <label>{t('policeStationLabel')}</label>
           <input value={form.station} onChange={e => set('station', e.target.value)} placeholder="e.g. Maninagar PS" />
         </div>
         <div className="form-group">
-          <label>District</label>
+          <label>{t('districtLabel')}</label>
           <input value={form.district} onChange={e => set('district', e.target.value)} placeholder="e.g. Ahmedabad City" />
         </div>
         <div className="form-group">
-          <label>Investigating Officer</label>
+          <label>{t('investigatingOfficerLabel')}</label>
           <input value={form.officer} onChange={e => set('officer', e.target.value)} placeholder="e.g. PI Amit Solanki" />
         </div>
         <div className="form-group">
-          <label>Date of Offense</label>
+          <label>{t('dateOfOffenseLabel')}</label>
           <input type="date" value={form.offenseDate} onChange={e => set('offenseDate', e.target.value)} />
         </div>
         <div className="form-group">
-          <label>Time of Offense</label>
+          <label>{t('timeOfOffenseLabel')}</label>
           <input type="time" value={form.offenseTime} onChange={e => set('offenseTime', e.target.value)} />
         </div>
         <div className="form-group">
-          <label>Place of Offense</label>
+          <label>{t('placeOfOffenseLabel')}</label>
           <input value={form.offensePlace} onChange={e => set('offensePlace', e.target.value)} placeholder="e.g. Near Maninagar Market" />
         </div>
       </div>
@@ -247,30 +247,30 @@ function CaseInfoStep({ form, set }) {
   );
 }
 
-function ComplainantStep({ form, set }) {
+function ComplainantStep({ form, set, t }) {
   return (
     <div className="form-step">
-      <h3 className="step-title">Complainant Details</h3>
-      <p className="step-desc">Information about the victim / complainant</p>
+      <h3 className="step-title">{t('complainantDetails')}</h3>
+      <p className="step-desc">{t('stepDescComplainant')}</p>
       <div className="form-grid">
         <div className="form-group full">
-          <label>Full Name *</label>
+          <label>{t('fullNameLabel')}</label>
           <input value={form.complainantName} onChange={e => set('complainantName', e.target.value)} placeholder="Full name" />
         </div>
         <div className="form-group">
-          <label>Age</label>
+          <label>{t('ageLabel')}</label>
           <input type="number" value={form.complainantAge} onChange={e => set('complainantAge', e.target.value)} placeholder="Age" />
         </div>
         <div className="form-group">
-          <label>Phone Number</label>
+          <label>{t('phoneNumberLabel')}</label>
           <input value={form.complainantPhone} onChange={e => set('complainantPhone', e.target.value)} placeholder="+91 XXXXX XXXXX" />
         </div>
         <div className="form-group">
-          <label>Occupation</label>
+          <label>{t('occupationLabel')}</label>
           <input value={form.complainantOccupation} onChange={e => set('complainantOccupation', e.target.value)} placeholder="e.g. Shopkeeper" />
         </div>
         <div className="form-group full">
-          <label>Residential Address</label>
+          <label>{t('residentialAddressLabel')}</label>
           <textarea value={form.complainantAddress} onChange={e => set('complainantAddress', e.target.value)} placeholder="Full residential address" rows={3} />
         </div>
       </div>
@@ -278,30 +278,30 @@ function ComplainantStep({ form, set }) {
   );
 }
 
-function AccusedStep({ form, addAccused, removeAccused, updateAccused }) {
+function AccusedStep({ form, addAccused, removeAccused, updateAccused, t }) {
   return (
     <div className="form-step">
-      <h3 className="step-title">Accused Details</h3>
-      <p className="step-desc">Add one or more accused persons</p>
+      <h3 className="step-title">{t('accusedDetails')}</h3>
+      <p className="step-desc">{t('stepDescAccused')}</p>
       {form.accusedPersons.map((a, i) => (
         <div key={i} className="accused-block">
           <div className="accused-block-header">
-            <span>Accused #{i + 1}</span>
+            <span>{t('accusedHashLabel', { number: i + 1 })}</span>
             {form.accusedPersons.length > 1 && (
               <button className="icon-remove" onClick={() => removeAccused(i)}><Trash2 size={14} /></button>
             )}
           </div>
           <div className="form-grid">
             <div className="form-group">
-              <label>Full Name</label>
+              <label>{t('fullNameLabel')}</label>
               <input value={a.name} onChange={e => updateAccused(i, 'name', e.target.value)} placeholder="Name or Unknown" />
             </div>
             <div className="form-group">
-              <label>Age (approx.)</label>
+              <label>{t('ageLabel')}</label>
               <input value={a.age} onChange={e => updateAccused(i, 'age', e.target.value)} placeholder="e.g. 25" />
             </div>
             <div className="form-group">
-              <label>Status</label>
+              <label>{t('statusLabel')}</label>
               <select value={a.status} onChange={e => updateAccused(i, 'status', e.target.value)}>
                 <option value="wanted">Wanted</option>
                 <option value="arrested">Arrested</option>
@@ -310,28 +310,28 @@ function AccusedStep({ form, addAccused, removeAccused, updateAccused }) {
               </select>
             </div>
             <div className="form-group">
-              <label>Identification Marks</label>
+              <label>{t('identificationMarksLabel')}</label>
               <input value={a.identification} onChange={e => updateAccused(i, 'identification', e.target.value)} placeholder="Physical description" />
             </div>
             <div className="form-group full">
-              <label>Address</label>
+              <label>{t('addressLabel')}</label>
               <input value={a.address} onChange={e => updateAccused(i, 'address', e.target.value)} placeholder="Address if known" />
             </div>
           </div>
         </div>
       ))}
-      <button className="btn-add" onClick={addAccused}><Plus size={14} /> Add Another Accused</button>
+      <button className="btn-add" onClick={addAccused}><Plus size={14} /> {t('addAnotherAccusedLabel')}</button>
     </div>
   );
 }
 
-function NarrativeStep({ form, set, analyzeNarrative, aiAnalyzing }) {
+function NarrativeStep({ form, set, analyzeNarrative, aiAnalyzing, t }) {
   return (
     <div className="form-step">
-      <h3 className="step-title">Incident Narrative</h3>
-      <p className="step-desc">Describe the incident in detail. AI will extract entities and suggest legal sections automatically.</p>
+      <h3 className="step-title">{t('incidentNarrative')}</h3>
+      <p className="step-desc">{t('stepDescNarrative')}</p>
       <div className="form-group">
-        <label>Full Incident Narrative *</label>
+        <label>{t('fullIncidentNarrativeLabel')}</label>
         <textarea
           value={form.narrative}
           onChange={e => set('narrative', e.target.value)}
@@ -341,67 +341,67 @@ function NarrativeStep({ form, set, analyzeNarrative, aiAnalyzing }) {
         />
       </div>
       <div className="narrative-actions">
-        <span className="word-count">{form.narrative.split(/\s+/).filter(Boolean).length} words</span>
+        <span className="word-count">{form.narrative.split(/\s+/).filter(Boolean).length} {form.narrative.split(/\s+/).filter(Boolean).length === 1 ? 'word' : 'words'}</span>
         <button
           className={`btn-ai ${aiAnalyzing ? 'analyzing' : ''}`}
           onClick={analyzeNarrative}
           disabled={aiAnalyzing}
         >
           {aiAnalyzing ? (
-            <><span className="spinner-sm" /> Analyzing Narrative...</>
+            <><span className="spinner-sm" /> {t('analyzingNarrativeProgress')}</>
           ) : (
-            <><Brain size={16} /> {('Analyze with AI')}</>
+            <><Brain size={16} /> {t('analyzeWithAILabel')}</>
           )}
         </button>
       </div>
       {form.suggestedSections.length > 0 && (
         <div className="ai-result-preview">
           <AlertCircle size={14} />
-          AI suggested <strong>{form.suggestedSections.length} sections</strong>. Proceed to the Sections step to review.
+          {t('aiSuggestedBannerText', { count: form.suggestedSections.length })}
         </div>
       )}
     </div>
   );
 }
 
-function EvidenceStep({ form, addEvidence, removeEvidence, updateEvidence }) {
+function EvidenceStep({ form, addEvidence, removeEvidence, updateEvidence, t }) {
   const TYPES = ['Physical', 'Digital', 'Document', 'Medical', 'Financial', 'Telecom', 'Forensic'];
   return (
     <div className="form-step">
-      <h3 className="step-title">Evidence Seized</h3>
-      <p className="step-desc">All items recovered or seized during investigation</p>
+      <h3 className="step-title">{t('evidenceSeized')}</h3>
+      <p className="step-desc">{t('stepDescEvidence')}</p>
       {form.evidenceItems.map((e, i) => (
         <div key={i} className="accused-block">
           <div className="accused-block-header">
-            <span>Evidence Item #{i + 1}</span>
+            <span>{t('evidenceItemHashLabel', { number: i + 1 })}</span>
             {form.evidenceItems.length > 1 && (
               <button className="icon-remove" onClick={() => removeEvidence(i)}><Trash2 size={14} /></button>
             )}
           </div>
           <div className="form-grid">
             <div className="form-group">
-              <label>Item Description</label>
+              <label>{t('itemDescriptionLabel')}</label>
               <input value={e.item} onChange={ev => updateEvidence(i, 'item', ev.target.value)} placeholder="e.g. Mobile phone (Samsung)" />
             </div>
             <div className="form-group">
-              <label>Evidence Type</label>
+              <label>{t('evidenceTypeLabel')}</label>
               <select value={e.type} onChange={ev => updateEvidence(i, 'type', ev.target.value)}>
                 {TYPES.map(t => <option key={t}>{t}</option>)}
               </select>
             </div>
             <div className="form-group full">
-              <label>Details / Notes</label>
+              <label>{t('detailsNotesLabel')}</label>
               <input value={e.description} onChange={ev => updateEvidence(i, 'description', ev.target.value)} placeholder="Serial numbers, condition, where found, etc." />
             </div>
           </div>
         </div>
       ))}
-      <button className="btn-add" onClick={addEvidence}><Plus size={14} /> Add Evidence Item</button>
+      <button className="btn-add" onClick={addEvidence}><Plus size={14} /> {t('addEvidenceItemLabel')}</button>
     </div>
   );
 }
 
-function SectionsStep({ form, setForm }) {
+function SectionsStep({ form, setForm, t }) {
   const toggleSection = (code) => {
     setForm(f => ({
       ...f,
@@ -415,16 +415,16 @@ function SectionsStep({ form, setForm }) {
 
   return (
     <div className="form-step">
-      <h3 className="step-title">Legal Sections</h3>
+      <h3 className="step-title">{t('legalSections')}</h3>
       <p className="step-desc">
         {form.suggestedSections.length > 0
-          ? `AI suggested ${form.suggestedSections.length} sections. Select the applicable ones.`
-          : 'Run AI analysis on the Narrative step, or manually add sections below.'}
+          ? t('stepDescSections')
+          : t('noAiSuggestionsYet')}
       </p>
       {form.suggestedSections.length === 0 && (
         <div className="empty-sections">
           <Brain size={32} />
-          <p>No AI suggestions yet. Go back to Narrative and click "Analyze with AI".</p>
+          <p>{t('noAiSuggestionsYet')}</p>
         </div>
       )}
       <div className="sections-list">
@@ -453,7 +453,7 @@ function SectionsStep({ form, setForm }) {
       </div>
       {form.selectedSections.length > 0 && (
         <div className="sections-summary">
-          <strong>{form.selectedSections.length} sections selected:</strong>{' '}
+          <strong>{t('sectionsSelectedCount', { count: form.selectedSections.length })}</strong>{' '}
           {form.selectedSections.join(', ')}
         </div>
       )}

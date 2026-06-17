@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Brain, Zap, BookOpen, Scale, AlertCircle, Copy, ExternalLink } from 'lucide-react';
 import toast from 'react-hot-toast';
 import useStore from '../../store/useStore';
@@ -6,6 +7,7 @@ import { legalSections, landmarkJudgments } from '../../data/mockData';
 import './LegalIntelligence.css';
 
 export default function LegalIntelligence() {
+  const { t } = useTranslation();
   const { analyzeNarrative } = useStore();
   const [narrative, setNarrative] = useState('');
   const [analyzing, setAnalyzing] = useState(false);
@@ -46,21 +48,21 @@ export default function LegalIntelligence() {
       {/* Input panel */}
       <div className="legal-input-panel">
         <div className="legal-input-header">
-          <div className="ai-badge"><Brain size={14} /> AI Legal Analysis Engine</div>
-          <p className="legal-input-desc">Paste the incident narrative below. The AI will identify applicable BNS, BNSS, BSA, NDPS and other sections and suggest landmark judgments.</p>
+          <div className="ai-badge"><Brain size={14} /> {t('aiLegalAnalysisEngine')}</div>
+          <p className="legal-input-desc">{t('legalInputDesc')}</p>
         </div>
         <textarea
           className="legal-textarea"
           value={narrative}
           onChange={e => setNarrative(e.target.value)}
-          placeholder="Paste incident narrative here...&#10;&#10;Example: On 12/06/2024 at approximately 23:00 hours, the accused armed with a knife robbed the complainant of his gold chain and mobile phone near the bus stop. Two other persons were involved and fled on a motorcycle."
+          placeholder={t('pasteNarrativePlaceholder')}
           rows={8}
         />
         <div className="legal-input-footer">
           <div className="input-stats">
-            <span>{narrative.split(/\s+/).filter(Boolean).length} words</span>
+            <span>{narrative.split(/\s+/).filter(Boolean).length} {narrative.split(/\s+/).filter(Boolean).length === 1 ? 'word' : 'words'}</span>
             <span>·</span>
-            <span>{narrative.length} characters</span>
+            <span>{narrative.length} {narrative.length === 1 ? 'character' : 'characters'}</span>
           </div>
           <button
             className={`btn-analyze ${analyzing ? 'analyzing' : ''}`}
@@ -68,9 +70,9 @@ export default function LegalIntelligence() {
             disabled={analyzing}
           >
             {analyzing ? (
-              <><span className="ai-spinner" /> Analyzing Narrative...</>
+              <><span className="ai-spinner" /> {t('analyzingNarrativeProgress')}</>
             ) : (
-              <><Zap size={16} /> Analyze & Suggest Sections</>
+              <><Zap size={16} /> {t('analyzeSuggestBtn')}</>
             )}
           </button>
         </div>
@@ -84,8 +86,8 @@ export default function LegalIntelligence() {
             <div className="orb b" />
             <div className="orb c" />
           </div>
-          <p>Processing narrative through legal knowledge base...</p>
-          <p className="analyzing-sub">Matching entities → Identifying offence categories → Cross-referencing BNS/BNSS/BSA sections</p>
+          <p>{t('processingKnowledgeBase')}</p>
+          <p className="analyzing-sub">{t('matchingEntitiesSub')}</p>
         </div>
       )}
 
@@ -95,34 +97,34 @@ export default function LegalIntelligence() {
           <div className="results-summary">
             <div className="result-stat">
               <span className="rs-num">{results.sections.length}</span>
-              <span className="rs-label">Sections Found</span>
+              <span className="rs-label">{t('sectionsFoundLabel')}</span>
             </div>
             <div className="result-stat">
               <span className="rs-num">{results.judgments.length}</span>
-              <span className="rs-label">Landmark Cases</span>
+              <span className="rs-label">{t('landmarkCasesLabel')}</span>
             </div>
             <div className="result-stat">
               <span className="rs-num">{[...new Set(results.sections.map(s => s.act))].length}</span>
-              <span className="rs-label">Acts Referenced</span>
+              <span className="rs-label">{t('actsReferencedLabel')}</span>
             </div>
             <button className="copy-all-btn" onClick={() => copy(results.sections.map(s => `${s.code} — ${s.title}`).join('\n'))}>
-              <Copy size={14} /> Copy All Sections
+              <Copy size={14} /> {t('copyAllSectionsLabel')}
             </button>
           </div>
 
           <div className="results-tabs">
             <button className={`tab ${activeTab === 'sections' ? 'active' : ''}`} onClick={() => setActiveTab('sections')}>
-              <Scale size={14} /> Legal Sections ({results.sections.length})
+              <Scale size={14} /> {t('legalSectionsTab', { count: results.sections.length })}
             </button>
             <button className={`tab ${activeTab === 'judgments' ? 'active' : ''}`} onClick={() => setActiveTab('judgments')}>
-              <BookOpen size={14} /> Landmark Judgments ({results.judgments.length})
+              <BookOpen size={14} /> {t('landmarkJudgmentsTab', { count: results.judgments.length })}
             </button>
           </div>
 
           {activeTab === 'sections' && (
             <div className="sections-results">
               {results.sections.length === 0 ? (
-                <div className="no-results"><AlertCircle size={24} /><p>No matching sections found. Try adding more details about the crime type.</p></div>
+                <div className="no-results"><AlertCircle size={24} /><p>{t('noMatchingSectionsFound')}</p></div>
               ) : (
                 results.sections.map(sec => (
                   <div key={sec.code} className="result-section-card">

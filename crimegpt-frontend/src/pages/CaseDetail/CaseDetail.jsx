@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { ArrowLeft, FileText, BookOpen, Package, User, Scale, Clock, Plus } from 'lucide-react';
 import useStore from '../../store/useStore';
 import './CaseDetail.css';
 
 export default function CaseDetail() {
+  const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   const { cases, selectCase, selectedCase } = useStore();
@@ -18,21 +20,20 @@ export default function CaseDetail() {
   if (!c) {
     return (
       <div className="case-detail-error fade-in">
-        <p>Case not found: {id}</p>
-        <button className="btn-secondary" onClick={() => navigate('/')}>← Back to Dashboard</button>
+        <p>{t('caseNotFound', { id })}</p>
+        <button className="btn-secondary" onClick={() => navigate('/')}>← {t('backToDashboard')}</button>
       </div>
     );
   }
 
   const statusMap = { active: 'badge-active', pending: 'badge-pending', closed: 'badge-closed' };
-  const severityColor = { critical: '#ef4444', high: '#f59e0b', medium: '#3b82f6', procedural: '#8b5cf6' };
 
   return (
     <div className="case-detail fade-in">
       {/* Header */}
       <div className="cd-header">
         <button className="back-btn" onClick={() => navigate(-1)}>
-          <ArrowLeft size={16} /> Back
+          <ArrowLeft size={16} /> {t('back')}
         </button>
         <div className="cd-title-wrap">
           <span className="cd-id">{c.id}</span>
@@ -43,15 +44,15 @@ export default function CaseDetail() {
             <span>{c.officer}</span>
             <span>·</span>
             <span>{c.date}</span>
-            <span className={`badge ${statusMap[c.status] || 'badge-pending'}`}>{c.status}</span>
+            <span className={`badge ${statusMap[c.status] || 'badge-pending'}`}>{t(c.status)}</span>
           </div>
         </div>
         <div className="cd-actions">
           <button className="btn-secondary" onClick={() => navigate('/documents')}>
-            <FileText size={15} /> Generate Documents
+            <FileText size={15} /> {t('generateDocumentsBtn')}
           </button>
           <button className="btn-primary" onClick={() => navigate('/case-diary')}>
-            <BookOpen size={15} /> Case Diary
+            <BookOpen size={15} /> {t('caseDiary')}
           </button>
         </div>
       </div>
@@ -59,13 +60,13 @@ export default function CaseDetail() {
       <div className="cd-body">
         {/* Sections */}
         <div className="cd-card">
-          <h3><Scale size={15} /> Applied Legal Sections</h3>
+          <h3><Scale size={15} /> {t('appliedLegalSections')}</h3>
           <div className="cd-sections">
             {(c.sections || []).map(s => (
               <span key={s} className="cd-section-tag">{s}</span>
             ))}
             {(!c.sections || c.sections.length === 0) && (
-              <span className="cd-empty">No sections applied yet. Use Legal Intelligence to suggest sections.</span>
+              <span className="cd-empty">{t('noSectionsApplied')}</span>
             )}
           </div>
         </div>
@@ -73,20 +74,20 @@ export default function CaseDetail() {
         <div className="cd-grid">
           {/* Narrative */}
           <div className="cd-card cd-card-wide">
-            <h3><FileText size={15} /> Incident Narrative</h3>
-            <p className="cd-narrative">{c.narrative || 'No narrative recorded.'}</p>
+            <h3><FileText size={15} /> {t('incidentNarrativeLabel')}</h3>
+            <p className="cd-narrative">{c.narrative || t('noNarrativeRecorded')}</p>
           </div>
 
           {/* Persons */}
           <div className="cd-card">
-            <h3><User size={15} /> Persons Involved</h3>
+            <h3><User size={15} /> {t('personsInvolved')}</h3>
             <div className="cd-persons">
               <div className="cd-person cd-complainant">
-                <span className="person-role">Complainant</span>
+                <span className="person-role">{t('complainant')}</span>
                 <span className="person-name">{c.complainant}</span>
               </div>
               <div className="cd-person cd-accused">
-                <span className="person-role">Accused</span>
+                <span className="person-role">{t('accused')}</span>
                 <span className="person-name">{c.accused}</span>
               </div>
             </div>
@@ -94,7 +95,7 @@ export default function CaseDetail() {
 
           {/* Evidence */}
           <div className="cd-card">
-            <h3><Package size={15} /> Evidence Seized ({(c.evidence || []).length} items)</h3>
+            <h3><Package size={15} /> {t('evidenceSeizedTitle', { count: (c.evidence || []).length })}</h3>
             <div className="cd-evidence-list">
               {(c.evidence || []).map(e => (
                 <div key={e.id} className="cd-evidence-item">
@@ -107,7 +108,7 @@ export default function CaseDetail() {
                 </div>
               ))}
               {(!c.evidence || c.evidence.length === 0) && (
-                <p className="cd-empty">No evidence recorded.</p>
+                <p className="cd-empty">{t('noEvidenceRecorded')}</p>
               )}
             </div>
           </div>
@@ -116,9 +117,9 @@ export default function CaseDetail() {
         {/* Diary */}
         <div className="cd-card">
           <div className="cd-card-header">
-            <h3><Clock size={15} /> Case Diary ({(c.diaryEntries || []).length} entries)</h3>
+            <h3><Clock size={15} /> {t('caseDiaryTitleCount', { count: (c.diaryEntries || []).length })}</h3>
             <button className="link-btn" onClick={() => navigate('/case-diary')}>
-              Full Diary <ArrowLeft size={12} style={{ transform: 'rotate(180deg)' }} />
+              {t('fullDiaryBtn')} <ArrowLeft size={12} style={{ transform: 'rotate(180deg)' }} />
             </button>
           </div>
           <div className="cd-diary-list">
@@ -135,7 +136,7 @@ export default function CaseDetail() {
               </div>
             ))}
             {(!c.diaryEntries || c.diaryEntries.length === 0) && (
-              <p className="cd-empty">No diary entries yet.</p>
+              <p className="cd-empty">{t('noDiaryEntriesYet')}</p>
             )}
           </div>
         </div>

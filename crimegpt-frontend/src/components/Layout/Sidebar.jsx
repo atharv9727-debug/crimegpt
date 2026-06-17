@@ -37,7 +37,7 @@ export default function Sidebar() {
         {sidebarOpen && (
           <div className="logo-text">
             <span className="logo-name">CrimeGPT</span>
-            <span className="logo-sub">AI Documentation</span>
+            <span className="logo-sub">{t('aiDocumentation')}</span>
           </div>
         )}
         <button className="sidebar-toggle" onClick={toggleSidebar} aria-label="Toggle sidebar">

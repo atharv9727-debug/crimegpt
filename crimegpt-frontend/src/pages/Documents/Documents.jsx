@@ -339,15 +339,15 @@ export default function Documents() {
         <div className="docs-search">
           <Search size={16} />
           <input
-            placeholder="Search documents..."
+            placeholder={t('searchDocsPlaceholder')}
             value={searchQ}
             onChange={e => setSearchQ(e.target.value)}
           />
         </div>
         <div className="case-selector-wrap">
-          <label>Select Case:</label>
+          <label>{t('selectCaseLabel')}</label>
           <select value={selectedCase} onChange={e => setSelectedCase(e.target.value)}>
-            <option value="">— Choose a Case —</option>
+            <option value="">{t('chooseCasePlaceholder')}</option>
             {cases.map(c => (
               <option key={c.id} value={c.id}>{c.id} — {c.title}</option>
             ))}
@@ -358,7 +358,7 @@ export default function Documents() {
       {selectedCase && activeCase && (
         <div className="selected-case-banner">
           <CheckCircle size={16} />
-          <span>Generating documents for <strong>{activeCase.id}</strong>: {activeCase.title}</span>
+          <span>{t('generatingDocsFor')} <strong>{activeCase.id}</strong>: {activeCase.title}</span>
           <span className="banner-sections">{activeCase.sections?.join(' · ')}</span>
         </div>
       )}
@@ -386,7 +386,7 @@ export default function Documents() {
                 onClick={() => handleGenerate(doc)}
                 disabled={!!generating}
               >
-                {generating === doc.id ? <><span className="spinner-sm" /> Generating...</> : <><Zap size={14} /> {t('generateDocument')}</>}
+                {generating === doc.id ? <><span className="spinner-sm" /> {t('loading')}</> : <><Zap size={14} /> {t('generateDocument')}</>}
               </button>
             </div>
           </div>
@@ -400,7 +400,7 @@ export default function Documents() {
             <div className="preview-header">
               <div>
                 <h3>{getDocTitle(selectedDoc)}</h3>
-                <p>Case: {selectedCase} · Generated {new Date().toLocaleString()}</p>
+                <p>{t('caseSelectLabel')} {selectedCase} · Generated {new Date().toLocaleString()}</p>
               </div>
               <div className="preview-actions">
                 <button className="preview-btn" onClick={handleDownload} title="Download TXT">

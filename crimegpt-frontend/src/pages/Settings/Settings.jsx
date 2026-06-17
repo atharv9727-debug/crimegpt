@@ -24,7 +24,7 @@ export default function Settings() {
       <div className="settings-grid">
         {/* Profile */}
         <div className="settings-card">
-          <div className="settings-card-header"><User size={18} /> Officer Profile</div>
+          <div className="settings-card-header"><User size={18} /> {t('officerProfile')}</div>
           <div className="profile-block">
             <div className="profile-avatar-lg">{officer?.avatar}</div>
             <div>
@@ -32,20 +32,20 @@ export default function Settings() {
               <p className="profile-rank">{officer?.rank}</p>
               <p className="profile-station">{officer?.station}</p>
               <p className="profile-badge">
-                <Shield size={11} /> Badge: {officer?.badge}
+                <Shield size={11} /> {t('badgeIdLabel')}: {officer?.badge}
               </p>
             </div>
           </div>
           <div className="profile-fields">
-            <div className="pf-row"><span>District</span><span>{officer?.district}</span></div>
-            <div className="pf-row"><span>Role</span><span className="pf-role">{officer?.role}</span></div>
+            <div className="pf-row"><span>{t('districtLabel')}</span><span>{officer?.district}</span></div>
+            <div className="pf-row"><span>{t('role')}</span><span className="pf-role">{officer?.role}</span></div>
           </div>
         </div>
 
         {/* Language */}
         <div className="settings-card">
-          <div className="settings-card-header"><Globe size={18} /> Language &amp; Localization</div>
-          <p className="settings-desc">Choose the interface and document output language.</p>
+          <div className="settings-card-header"><Globe size={18} /> {t('languageLocalization')}</div>
+          <p className="settings-desc">{t('chooseLanguageDesc')}</p>
           <div className="lang-options">
             {LANGUAGES.map(lang => (
               <button
@@ -66,18 +66,18 @@ export default function Settings() {
 
         {/* Notifications */}
         <div className="settings-card">
-          <div className="settings-card-header"><Bell size={18} /> Notifications</div>
+          <div className="settings-card-header"><Bell size={18} /> {t('notifications')}</div>
           <div className="settings-toggles">
             {[
-              { label: 'New Case Alerts', desc: 'Get notified when a new case is registered' },
-              { label: 'Document Generated', desc: 'Notify when a document is ready' },
-              { label: 'AI Suggestions', desc: 'Notify when AI finds applicable sections' },
-              { label: 'Arrest Updates', desc: 'Updates on accused arrest status' },
+              { labelKey: 'newCaseAlertsLabel', descKey: 'newCaseAlertsDesc' },
+              { labelKey: 'docGeneratedLabel', descKey: 'docGeneratedDesc' },
+              { labelKey: 'aiSuggestionsLabel', descKey: 'aiSuggestionsDesc' },
+              { labelKey: 'arrestUpdatesLabel', descKey: 'arrestUpdatesDesc' },
             ].map((item, i) => (
               <div key={i} className="toggle-row">
                 <div>
-                  <p className="toggle-label">{item.label}</p>
-                  <p className="toggle-desc">{item.desc}</p>
+                  <p className="toggle-label">{t(item.labelKey)}</p>
+                  <p className="toggle-desc">{t(item.descKey)}</p>
                 </div>
                 <label className="toggle-switch">
                   <input type="checkbox" defaultChecked={i < 2} />
@@ -90,18 +90,18 @@ export default function Settings() {
 
         {/* System info */}
         <div className="settings-card">
-          <div className="settings-card-header"><Info size={18} /> System Information</div>
+          <div className="settings-card-header"><Info size={18} /> {t('systemInformation')}</div>
           <div className="sys-info-list">
             {[
-              { label: 'Platform', value: 'CrimeGPT v1.0.0' },
-              { label: 'Legal Dataset', value: 'BNS 2023 / BNSS 2023 / BSA 2023' },
-              { label: 'AI Engine', value: 'Rule-based + NLP Classifier' },
-              { label: 'Document Formats', value: 'TXT / PDF / DOCX' },
-              { label: 'Languages', value: 'English · Hindi · Gujarati' },
-              { label: 'Department', value: 'Gujarat Police' },
+              { labelKey: 'platformLabel', value: 'CrimeGPT v1.0.0' },
+              { labelKey: 'legalDatasetLabel', value: 'BNS 2023 / BNSS 2023 / BSA 2023' },
+              { labelKey: 'aiEngineLabel', value: 'Rule-based + NLP Classifier' },
+              { labelKey: 'docFormatsLabel', value: 'TXT / PDF / DOCX' },
+              { labelKey: 'languagesLabel', value: 'English · Hindi · Gujarati' },
+              { labelKey: 'departmentLabel', value: 'Gujarat Police' },
             ].map(item => (
-              <div key={item.label} className="sys-row">
-                <span className="sys-label">{item.label}</span>
+              <div key={item.labelKey} className="sys-row">
+                <span className="sys-label">{t(item.labelKey)}</span>
                 <span className="sys-value">{item.value}</span>
               </div>
             ))}

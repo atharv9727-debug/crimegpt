@@ -3,19 +3,21 @@ import Sidebar from './Sidebar';
 import Topbar from './Topbar';
 import useStore from '../../store/useStore';
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import './Layout.css';
 
 const PAGE_TITLES = {
-  '/': { title: 'Dashboard', subtitle: 'Overview of all cases and activities' },
-  '/new-case': { title: 'New Case Entry', subtitle: 'Unified data pool — enter once, generate all documents' },
-  '/case-diary': { title: 'Case Diary', subtitle: 'Timeline of investigative actions' },
-  '/documents': { title: 'Document Generator', subtitle: 'Generate, preview and download legal documents' },
-  '/legal-intel': { title: 'Legal Intelligence', subtitle: 'AI-powered section suggestion (BNS / BNSS / BSA)' },
-  '/search-audit': { title: 'Search & Audit', subtitle: 'Search cases, documents, and view version history' },
-  '/settings': { title: 'Settings', subtitle: 'Preferences, profile, and system configuration' },
+  '/': { titleKey: 'dashboardTitle', subtitleKey: 'dashboardSubtitle' },
+  '/new-case': { titleKey: 'newCaseTitle', subtitleKey: 'newCaseSubtitle' },
+  '/case-diary': { titleKey: 'caseDiaryTitle', subtitleKey: 'caseDiarySubtitle' },
+  '/documents': { titleKey: 'documentsTitle', subtitleKey: 'documentsSubtitle' },
+  '/legal-intel': { titleKey: 'legalIntelTitle', subtitleKey: 'legalIntelSubtitle' },
+  '/search-audit': { titleKey: 'searchAuditTitle', subtitleKey: 'searchAuditSubtitle' },
+  '/settings': { titleKey: 'settingsTitle', subtitleKey: 'settingsSubtitle' },
 };
 
 export default function Layout({ children }) {
+  const { t } = useTranslation();
   const sidebarOpen = useStore(s => s.sidebarOpen);
   const location = useLocation();
   const path = location.pathname;
@@ -28,7 +30,7 @@ export default function Layout({ children }) {
     <div className={`app-shell ${sidebarOpen ? 'sidebar-open' : 'sidebar-collapsed'}`}>
       <Sidebar />
       <div className="main-area">
-        <Topbar title={meta.title} subtitle={meta.subtitle} />
+        <Topbar title={t(meta.titleKey)} subtitle={t(meta.subtitleKey)} />
         <main className="page-content fade-in">
           {children}
         </main>
@@ -36,3 +38,4 @@ export default function Layout({ children }) {
     </div>
   );
 }
+

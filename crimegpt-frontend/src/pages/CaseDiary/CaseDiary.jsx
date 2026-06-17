@@ -6,11 +6,11 @@ import useStore from '../../store/useStore';
 import './CaseDiary.css';
 
 const ENTRY_TYPES = [
-  { value: 'statement', label: 'Statement Recorded', icon: FileText, color: '#3b82f6' },
-  { value: 'arrest', label: 'Arrest Made', icon: User, color: '#ef4444' },
-  { value: 'evidence', label: 'Evidence Seized', icon: Package, color: '#f59e0b' },
-  { value: 'court', label: 'Court Appearance', icon: Scale, color: '#8b5cf6' },
-  { value: 'investigation', label: 'Investigation Step', icon: BookOpen, color: '#22c55e' },
+  { value: 'statement', labelKey: 'statementRecorded', icon: FileText, color: '#3b82f6' },
+  { value: 'arrest', labelKey: 'arrestMade', icon: User, color: '#ef4444' },
+  { value: 'evidence', labelKey: 'evidenceSeized', icon: Package, color: '#f59e0b' },
+  { value: 'court', labelKey: 'courtAppearance', icon: Scale, color: '#8b5cf6' },
+  { value: 'investigation', labelKey: 'investigationStep', icon: BookOpen, color: '#22c55e' },
 ];
 
 export default function CaseDiary() {
@@ -45,7 +45,7 @@ export default function CaseDiary() {
       {/* Case selector */}
       <div className="diary-header">
         <div className="case-select-wrap">
-          <label>Case:</label>
+          <label>{t('caseSelectLabel')}</label>
           <select value={selectedCase} onChange={e => setSelectedCase(e.target.value)}>
             {cases.map(c => (
               <option key={c.id} value={c.id}>{c.id} — {c.title}</option>
@@ -53,42 +53,42 @@ export default function CaseDiary() {
           </select>
         </div>
         <button className="btn-primary" onClick={() => setShowAddEntry(s => !s)}>
-          <Plus size={16} /> Add Diary Entry
+          <Plus size={16} /> {t('addDiaryEntryBtn')}
         </button>
       </div>
 
       {/* Add Entry form */}
       {showAddEntry && (
         <div className="add-entry-panel">
-          <h3>New Diary Entry</h3>
+          <h3>{t('newDiaryEntry')}</h3>
           <div className="entry-form-grid">
             <div className="form-group">
-              <label>Entry Type</label>
+              <label>{t('entryType')}</label>
               <select value={entryForm.type} onChange={e => setEntryForm(f => ({ ...f, type: e.target.value }))}>
-                {ENTRY_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+                {ENTRY_TYPES.map(item => <option key={item.value} value={item.value}>{t(item.labelKey)}</option>)}
               </select>
             </div>
             <div className="form-group">
-              <label>Officer Name</label>
+              <label>{t('officerName')}</label>
               <input
                 value={entryForm.officer}
                 onChange={e => setEntryForm(f => ({ ...f, officer: e.target.value }))}
-                placeholder="Officer name"
+                placeholder={t('officer')}
               />
             </div>
             <div className="form-group full">
-              <label>Action Description *</label>
+              <label>{t('actionDescription')}</label>
               <textarea
                 value={entryForm.action}
                 onChange={e => setEntryForm(f => ({ ...f, action: e.target.value }))}
-                placeholder="Describe the investigative action taken in detail..."
+                placeholder={t('actionPlaceholder')}
                 rows={3}
               />
             </div>
           </div>
           <div className="entry-form-actions">
-            <button className="btn-secondary" onClick={() => setShowAddEntry(false)}>Cancel</button>
-            <button className="btn-primary" onClick={handleAddEntry}><Plus size={14} /> Add Entry</button>
+            <button className="btn-secondary" onClick={() => setShowAddEntry(false)}>{t('cancel')}</button>
+            <button className="btn-primary" onClick={handleAddEntry}><Plus size={14} /> {t('addEntry')}</button>
           </div>
         </div>
       )}
@@ -104,7 +104,7 @@ export default function CaseDiary() {
               <span>·</span>
               <span>{activeCase.officer}</span>
               <span>·</span>
-              <span className={`badge badge-${activeCase.status === 'active' ? 'active' : activeCase.status === 'pending' ? 'pending' : 'closed'}`}>{activeCase.status}</span>
+              <span className={`badge badge-${activeCase.status === 'active' ? 'active' : activeCase.status === 'pending' ? 'pending' : 'closed'}`}>{t(activeCase.status)}</span>
             </div>
           </div>
           <div className="dci-sections">
@@ -117,11 +117,11 @@ export default function CaseDiary() {
 
       {/* Timeline */}
       <div className="diary-timeline">
-        <h3 className="timeline-title"><Clock size={16} /> Investigation Timeline ({entries.length} entries)</h3>
+        <h3 className="timeline-title"><Clock size={16} /> {t('investigationTimeline', { count: entries.length })}</h3>
         {entries.length === 0 ? (
           <div className="timeline-empty">
             <BookOpen size={32} />
-            <p>No diary entries yet. Add the first entry above.</p>
+            <p>{t('noDiaryEntriesYet')}</p>
           </div>
         ) : (
           <div className="timeline-list">
@@ -138,10 +138,10 @@ export default function CaseDiary() {
                     <div className="timeline-meta">
                       <span className="timeline-date">{entry.date}</span>
                       <span className="timeline-time">{entry.time}</span>
-                      <span className="timeline-type" style={{ color: typeInfo.color }}>{typeInfo.label}</span>
+                      <span className="timeline-type" style={{ color: typeInfo.color }}>{t(typeInfo.labelKey)}</span>
                     </div>
                     <p className="timeline-action">{entry.action}</p>
-                    <p className="timeline-officer">Officer: {entry.officer}</p>
+                    <p className="timeline-officer">{t('officer')}: {entry.officer}</p>
                   </div>
                 </div>
               );

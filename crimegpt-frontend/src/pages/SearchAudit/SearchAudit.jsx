@@ -1,10 +1,12 @@
 import React, { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Search, Filter, Clock, FileText, Edit3, Plus, ChevronRight, Download } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import useStore from '../../store/useStore';
 import './SearchAudit.css';
 
 export default function SearchAudit() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { cases, auditLog, generatedDocs } = useStore();
   const [query, setQuery] = useState('');
@@ -40,7 +42,7 @@ export default function SearchAudit() {
           <input
             id="global-search"
             className="search-input"
-            placeholder="Search by case number, name, sections, station..."
+            placeholder={t('searchPlaceholder')}
             value={query}
             onChange={e => setQuery(e.target.value)}
             autoFocus
@@ -54,13 +56,13 @@ export default function SearchAudit() {
       {/* Tabs */}
       <div className="audit-tabs">
         <button className={`tab ${activeTab === 'cases' ? 'active' : ''}`} onClick={() => setActiveTab('cases')}>
-          <FileText size={14} /> Cases ({filteredCases.length})
+          <FileText size={14} /> {t('casesTab', { count: filteredCases.length })}
         </button>
         <button className={`tab ${activeTab === 'audit' ? 'active' : ''}`} onClick={() => setActiveTab('audit')}>
-          <Clock size={14} /> Audit Trail ({auditLog.length})
+          <Clock size={14} /> {t('auditTrailTab', { count: auditLog.length })}
         </button>
         <button className={`tab ${activeTab === 'docs' ? 'active' : ''}`} onClick={() => setActiveTab('docs')}>
-          <FileText size={14} /> Generated Docs ({generatedDocs.length})
+          <FileText size={14} /> {t('generatedDocsTab', { count: generatedDocs.length })}
         </button>
       </div>
 
@@ -75,10 +77,12 @@ export default function SearchAudit() {
                 className={`filter-chip ${statusFilter === s ? 'active' : ''}`}
                 onClick={() => setStatusFilter(s)}
               >
-                {s === 'all' ? 'All Cases' : s.charAt(0).toUpperCase() + s.slice(1)}
+                {s === 'all' ? t('allCasesFilter') : t(s)}
               </button>
             ))}
-            <span className="results-count">{filteredCases.length} result{filteredCases.length !== 1 ? 's' : ''}</span>
+            <span className="results-count">
+              {filteredCases.length === 1 ? t('resultsCount', { count: 1 }) : t('resultsCountPlural', { count: filteredCases.length })}
+            </span>
           </div>
 
           {/* Results */}
@@ -86,8 +90,8 @@ export default function SearchAudit() {
             {filteredCases.length === 0 ? (
               <div className="no-results-state">
                 <Search size={32} />
-                <p>No cases found matching "{query}"</p>
-                <span>Try searching by case number, name, or section</span>
+                <p>{t('noCasesFoundMatching', { query })}</p>
+                <span>{t('trySearchingBy')}</span>
               </div>
             ) : (
               filteredCases.map(c => (
@@ -107,7 +111,7 @@ export default function SearchAudit() {
                     </div>
                   </div>
                   <div className="scc-right">
-                    <span className={`badge badge-${c.status === 'active' ? 'active' : c.status === 'pending' ? 'pending' : 'closed'}`}>{c.status}</span>
+                    <span className={`badge badge-${c.status === 'active' ? 'active' : c.status === 'pending' ? 'pending' : 'closed'}`}>{t(c.status)}</span>
                     <span className="scc-date">{c.date}</span>
                     <ChevronRight size={16} className="scc-arrow" />
                   </div>
@@ -136,12 +140,12 @@ export default function SearchAudit() {
                     <span className="ae-time">{entry.time}</span>
                   </div>
                 </div>
-                <span className="ae-type" style={{ color, background: color + '15' }}>{entry.type}</span>
+                <span className="ae-type" style={{ color, background: color + '15' }}>{t(entry.type)}</span>
               </div>
             );
           })}
           {auditLog.length === 0 && (
-            <div className="no-results-state"><Clock size={32} /><p>No audit entries yet.</p></div>
+            <div className="no-results-state"><Clock size={32} /><p>{t('noAuditEntries')}</p></div>
           )}
         </div>
       )}
@@ -149,14 +153,14 @@ export default function SearchAudit() {
       {activeTab === 'docs' && (
         <div className="docs-audit-list">
           {generatedDocs.length === 0 ? (
-            <div className="no-results-state"><FileText size={32} /><p>No documents generated yet. Go to Documents to generate them.</p></div>
+            <div className="no-results-state"><FileText size={32} /><p>{t('noDocsGeneratedYet')}</p></div>
           ) : (
             generatedDocs.map(doc => (
               <div key={doc.id} className="doc-audit-entry">
                 <FileText size={16} />
                 <div>
                   <p className="dae-title">{doc.title}</p>
-                  <p className="dae-meta">Case {doc.caseId} · {new Date(doc.createdAt).toLocaleString()}</p>
+                  <p className="dae-meta">{t('caseSelectLabel')} {doc.caseId} · {new Date(doc.createdAt).toLocaleString()}</p>
                 </div>
                 <button className="dae-download" title="Download"><Download size={14} /></button>
               </div>

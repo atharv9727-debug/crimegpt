@@ -51,7 +51,7 @@ export default function Topbar({ title, subtitle }) {
 
         {/* Quick stat */}
         <div className="topbar-stat">
-          <span className="stat-label">Active</span>
+          <span className="stat-label">{t('active')}</span>
           <span className="stat-value">{stats?.activeCases}</span>
         </div>
       </div>

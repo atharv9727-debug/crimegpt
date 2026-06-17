@@ -25,6 +25,7 @@ function StatCard({ icon: Icon, label, value, color, trend }) {
 }
 
 function CaseRow({ c, onClick }) {
+  const { t } = useTranslation();
   const statusMap = { active: 'badge-active', pending: 'badge-pending', closed: 'badge-closed' };
   return (
     <div className="case-row" onClick={onClick} role="button" tabIndex={0} onKeyDown={e => e.key === 'Enter' && onClick()}>
@@ -34,7 +35,7 @@ function CaseRow({ c, onClick }) {
         <p className="case-row-meta">{c.station} · {c.officer}</p>
       </div>
       <div className="case-row-right">
-        <span className={`badge ${statusMap[c.status] || 'badge-pending'}`}>{c.status}</span>
+        <span className={`badge ${statusMap[c.status] || 'badge-pending'}`}>{t(c.status)}</span>
         <span className="case-row-date">{c.date}</span>
         <ChevronRight size={14} className="case-row-arrow" />
       </div>
@@ -50,17 +51,17 @@ export default function Dashboard() {
   const recentCases = cases.slice(0, 5);
 
   const quickActions = [
-    { label: 'Register New FIR', icon: FilePlus, path: '/new-case', color: 'blue' },
-    { label: 'Generate Documents', icon: FileText, path: '/documents', color: 'purple' },
-    { label: 'AI Legal Analysis', icon: Brain, path: '/legal-intel', color: 'cyan' },
-    { label: 'View Case Diary', icon: BookOpen, path: '/case-diary', color: 'green' },
+    { labelKey: 'registerNewFIR', icon: FilePlus, path: '/new-case', color: 'blue' },
+    { labelKey: 'documents', icon: FileText, path: '/documents', color: 'purple' },
+    { labelKey: 'legalIntel', icon: Brain, path: '/legal-intel', color: 'cyan' },
+    { labelKey: 'caseDiary', icon: BookOpen, path: '/case-diary', color: 'green' },
   ];
 
   const activityItems = [
-    { text: 'Chargesheet generated for CR-2024-0878', time: '2h ago', icon: FileText, done: true },
-    { text: 'Accused Raju Prasad arrested in CR-2024-0892', time: '5h ago', icon: CheckCircle2, done: true },
-    { text: 'Medical letter pending for CR-2024-0885', time: '1d ago', icon: AlertTriangle, done: false },
-    { text: 'AI suggested 3 new sections for CR-2024-0891', time: '2d ago', icon: Brain, done: true },
+    { text: t('activityChargesheetGenerated', { caseId: 'CR-2024-0878' }), time: t('twoHoursAgo'), icon: FileText, done: true },
+    { text: t('activityAccusedArrested', { name: 'Raju Prasad', caseId: 'CR-2024-0892' }), time: t('fiveHoursAgo'), icon: CheckCircle2, done: true },
+    { text: t('activityMedicalLetterPending', { caseId: 'CR-2024-0885' }), time: t('oneDayAgo'), icon: AlertTriangle, done: false },
+    { text: t('activityAiSectionsSuggested', { count: 3, caseId: 'CR-2024-0891' }), time: t('twoDaysAgo'), icon: Brain, done: true },
   ];
 
   return (
@@ -68,12 +69,12 @@ export default function Dashboard() {
       {/* Welcome */}
       <div className="dashboard-welcome">
         <div>
-          <h2 className="welcome-title">Good afternoon, <span className="gradient-text">{officer?.name}</span></h2>
+          <h2 className="welcome-title">{t('welcomeOfficer', { name: officer?.name })}</h2>
           <p className="welcome-sub">{officer?.station} · {officer?.district}</p>
         </div>
         <button className="btn-primary" onClick={() => navigate('/new-case')}>
           <FilePlus size={16} />
-          Register New FIR
+          {t('registerNewFIR')}
         </button>
       </div>
 
@@ -108,10 +109,10 @@ export default function Dashboard() {
           <div className="dash-panel">
             <div className="panel-header"><h3>{t('quickActions')}</h3></div>
             <div className="quick-actions-grid">
-              {quickActions.map(({ label, icon: Icon, path, color }) => (
+              {quickActions.map(({ labelKey, icon: Icon, path, color }) => (
                 <button key={path} className={`quick-action-btn qa-${color}`} onClick={() => navigate(path)}>
                   <Icon size={20} />
-                  <span>{label}</span>
+                  <span>{t(labelKey)}</span>
                 </button>
               ))}
             </div>
@@ -120,7 +121,7 @@ export default function Dashboard() {
           {/* Activity Feed */}
           <div className="dash-panel">
             <div className="panel-header">
-              <h3>Recent Activity</h3>
+              <h3>{t('recentActivity')}</h3>
               <Clock size={14} className="panel-icon" />
             </div>
             <div className="activity-list">
@@ -142,8 +143,8 @@ export default function Dashboard() {
           <div className="ai-tip-card">
             <div className="ai-tip-icon"><Zap size={14} /></div>
             <div>
-              <p className="ai-tip-title">AI Ready</p>
-              <p className="ai-tip-body">Paste any incident narrative on the <strong>Legal Intelligence</strong> page to get instant BNS/BNSS section suggestions and landmark judgments.</p>
+              <p className="ai-tip-title">{t('aiReady')}</p>
+              <p className="ai-tip-body">{t('aiTipBody')}</p>
             </div>
           </div>
         </div>

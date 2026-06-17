@@ -242,3 +242,38 @@
   font-size: 11px;
   color: var(--text-muted);
 }
+
+/* Language switcher on Login Page */
+.login-lang-switch {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-default);
+  padding: 4px 10px;
+  border-radius: 99px;
+  margin-bottom: -8px;
+  align-self: flex-end;
+}
+.login-lang-switch .lang-icon {
+  color: var(--text-muted);
+  margin-right: 4px;
+}
+.login-lang-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.login-lang-btn:hover {
+  color: var(--text-primary);
+}
+.login-lang-btn.active {
+  background: var(--accent-primary);
+  color: white;
+}
