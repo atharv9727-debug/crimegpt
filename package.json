@@ -1,0 +1,16 @@
+{
+  "name": "crimegpt",
+  "version": "1.0.0",
+  "description": "CrimeGPT — AI-Driven Police Documentation Platform (Monorepo)",
+  "private": true,
+  "scripts": {
+    "frontend": "cd crimegpt-frontend && npm run dev",
+    "backend": "cd crimegpt-backend && npm run dev",
+    "install:all": "cd crimegpt-frontend && npm install && cd ../crimegpt-backend && npm install",
+    "dev": "concurrently \"npm run frontend\" \"npm run backend\""
+  },
+  "workspaces": [
+    "crimegpt-frontend",
+    "crimegpt-backend"
+  ]
+}
