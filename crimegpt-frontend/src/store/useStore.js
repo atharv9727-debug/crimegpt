@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 
-const API_URL = import.meta.env.VITE_API_URL || '';
+const API_URL = (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1')
+  ? ''
+  : (import.meta.env.VITE_API_URL || '');
 
 // Centralized API requester helper
 const apiRequest = async (endpoint, options = {}) => {
