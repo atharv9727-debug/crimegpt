@@ -5,11 +5,9 @@
   "outputDirectory": "dist",
   "framework": "vite",
   "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/index.js" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
-  "env": {
-    "VITE_API_URL": "https://crimegpt-backend.railway.app"
-  },
   "headers": [
     {
       "source": "/(.*)",
