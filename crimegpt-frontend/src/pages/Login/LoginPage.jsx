@@ -22,11 +22,16 @@ export default function LoginPage() {
       return;
     }
     setLoading(true);
-    await new Promise(r => setTimeout(r, 1000)); // simulate auth
-    login(form);
-    toast.success('Welcome back, Officer!');
-    navigate('/');
-    setLoading(false);
+    try {
+      await login(form);
+      toast.success('Welcome back, Officer!');
+      navigate('/');
+    } catch (err) {
+      setError(err.message || 'Login failed. Please check credentials or ensure backend is awake.');
+      toast.error('Authentication failed.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDemo = () => {
