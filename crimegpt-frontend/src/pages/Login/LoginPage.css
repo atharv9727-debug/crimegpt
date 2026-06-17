@@ -101,31 +101,34 @@
 .login-form { display: flex; flex-direction: column; gap: 16px; }
 .form-group { display: flex; flex-direction: column; gap: 6px; }
 .form-group label { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
-.input-wrap {
+.login-page .input-wrap {
   position: relative;
   display: flex;
   align-items: center;
 }
-.input-icon {
+.login-page .input-icon {
   position: absolute;
-  left: 12px;
+  left: 14px;
   color: var(--text-muted);
   pointer-events: none;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.input-wrap input {
+.login-page .input-wrap input {
   width: 100%;
   background: var(--bg-elevated);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-md);
-  padding: 11px 40px 11px 38px;
+  padding: 11px 40px 11px 42px;
   font-size: 14px;
   color: var(--text-primary);
   transition: var(--transition);
   outline: none;
 }
-.input-wrap input::placeholder { color: var(--text-muted); }
-.input-wrap input:focus { border-color: var(--accent-primary); box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
+.login-page .input-wrap input::placeholder { color: var(--text-muted); }
+.login-page .input-wrap input:focus { border-color: var(--accent-primary); box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
 .pass-toggle {
   position: absolute;
   right: 12px;
