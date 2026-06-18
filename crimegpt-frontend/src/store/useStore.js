@@ -81,6 +81,32 @@ const useStore = create((set, get) => ({
     }
   },
 
+  register: async (officerData) => {
+    set({ isLoading: true });
+    try {
+      const data = await apiRequest('/api/auth/register', {
+        method: 'POST',
+        body: JSON.stringify(officerData),
+      });
+      
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('officer', JSON.stringify(data.officer));
+      
+      set({ 
+        isAuthenticated: true, 
+        officer: data.officer, 
+        isLoading: false 
+      });
+      
+      await get().initializeData();
+      return true;
+    } catch (err) {
+      set({ isLoading: false });
+      console.error('Registration failed:', err);
+      throw err;
+    }
+  },
+
   logout: () => {
     localStorage.removeItem('token');
     localStorage.removeItem('officer');

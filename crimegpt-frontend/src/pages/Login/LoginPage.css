@@ -277,3 +277,118 @@
   background: var(--accent-primary);
   color: white;
 }
+
+/* Sign Up & Demo profiles styling */
+.login-toggle-mode {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 16px;
+}
+.toggle-mode-btn {
+  background: transparent;
+  border: none;
+  color: var(--accent-primary);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  padding: 0;
+  font-size: 13px;
+}
+.toggle-mode-btn:hover {
+  color: var(--text-accent);
+  text-decoration: underline;
+}
+
+.register-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.demo-profiles-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+.demo-profile-tile {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: left;
+  width: 100%;
+}
+.demo-profile-tile:hover:not(:disabled) {
+  border-color: var(--accent-primary);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  background: var(--bg-hover);
+}
+.demo-profile-tile:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.demo-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.demo-profile-tile:nth-child(2) .demo-avatar { background: linear-gradient(135deg, #10b981, #059669); }
+.demo-profile-tile:nth-child(3) .demo-avatar { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+.demo-profile-tile:nth-child(4) .demo-avatar { background: linear-gradient(135deg, #f59e0b, #d97706); }
+
+.demo-tile-details {
+  flex: 1;
+  min-width: 0;
+}
+.demo-tile-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+.demo-tile-meta {
+  font-size: 10px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}
+
+@media (max-width: 480px) {
+  .register-form-grid {
+    grid-template-columns: 1fr;
+  }
+  .demo-profiles-grid {
+    grid-template-columns: 1fr;
+  }
+  .login-card {
+    padding: 24px 16px;
+  }
+  .login-container {
+    max-width: 100%;
+  }
+}
