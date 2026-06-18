@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Globe, Search, Bell, Menu } from 'lucide-react';
+import { Globe, Search, Bell, Menu, Sun, Moon } from 'lucide-react';
 import useStore from '../../store/useStore';
 import './Topbar.css';
 
@@ -12,7 +12,7 @@ const LANGUAGES = [
 
 export default function Topbar({ title, subtitle }) {
   const { t, i18n } = useTranslation();
-  const { language, setLanguage, stats, toggleSidebar } = useStore();
+  const { language, setLanguage, stats, toggleSidebar, theme, setTheme } = useStore();
   const [showNotif, setShowNotif] = useState(false);
   const [hasUnread, setHasUnread] = useState(true);
   const dropdownRef = useRef(null);
@@ -60,6 +60,16 @@ export default function Topbar({ title, subtitle }) {
             </button>
           ))}
         </div>
+
+        {/* Theme Toggle */}
+        <button
+          className="icon-btn theme-toggle-btn"
+          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+          title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          aria-label="Toggle Theme"
+        >
+          {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+        </button>
 
         {/* Notifications */}
         <div className="notif-container" ref={dropdownRef}>

@@ -414,6 +414,7 @@ const useStore = create((set, get) => ({
   // ── UI State ────────────────────────────────────────────────────────────
   language: localStorage.getItem('language') || 'en',
   sidebarOpen: true,
+  theme: localStorage.getItem('theme') || 'dark',
 
   setLanguage: (lang) => {
     localStorage.setItem('language', lang);
@@ -421,6 +422,11 @@ const useStore = create((set, get) => ({
   },
 
   toggleSidebar: () => set(s => ({ sidebarOpen: !s.sidebarOpen })),
+
+  setTheme: (theme) => {
+    localStorage.setItem('theme', theme);
+    set({ theme });
+  },
 
   // ── Audit ───────────────────────────────────────────────────────────────
   auditLog: [],

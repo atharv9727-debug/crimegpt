@@ -23,11 +23,16 @@ function ProtectedRoute({ children }) {
 
 export default function App() {
   const language = useStore(s => s.language);
+  const theme = useStore(s => s.theme);
   const { isAuthenticated, initializeData } = useStore();
 
   useEffect(() => {
     i18n.changeLanguage(language);
   }, [language]);
+
+  useEffect(() => {
+    document.documentElement.className = theme === 'light' ? 'light-theme' : '';
+  }, [theme]);
 
   useEffect(() => {
     if (isAuthenticated) {
