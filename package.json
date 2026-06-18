@@ -7,7 +7,10 @@
     "frontend": "cd crimegpt-frontend && npm run dev",
     "backend": "cd crimegpt-backend && npm run dev",
     "install:all": "cd crimegpt-frontend && npm install && cd ../crimegpt-backend && npm install",
-    "dev": "concurrently \"npm run frontend\" \"npm run backend\""
+    "dev": "concurrently \"npm run frontend\" \"npm run backend\"",
+    "build": "cd crimegpt-frontend && npm install && npm run build && cd ../crimegpt-backend && npm install",
+    "start": "cd crimegpt-backend && node src/server.js",
+    "render-build": "cd crimegpt-frontend && npm install && npm run build && cd ../crimegpt-backend && npm install"
   },
   "workspaces": [
     "crimegpt-frontend",

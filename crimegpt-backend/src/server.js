@@ -4,6 +4,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
+const path = require('path');
 
 const authRoutes = require('./routes/auth');
 const caseRoutes = require('./routes/cases');
@@ -19,6 +20,7 @@ const PORT = process.env.PORT || 5000;
 // Security middlewares
 app.use(helmet({
   crossOriginResourcePolicy: false,
+  contentSecurityPolicy: false, // Allow inline scripts for React
 }));
 app.use(cors()); // Allow all origins for the prototype
 app.use(morgan('dev'));
@@ -43,7 +45,7 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Routes
+// API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/cases', caseRoutes);
 app.use('/api/documents', documentRoutes);
@@ -52,7 +54,25 @@ app.use('/api/search', searchRoutes);
 app.use('/api/audit', auditRoutes);
 app.use('/api/nlp', nlpRoutes);
 
-// 404 handler
+// --- Production: Serve frontend static files ---
+const frontendBuildPath = path.join(__dirname, '..', '..', 'crimegpt-frontend', 'dist');
+app.use(express.static(frontendBuildPath));
+
+// SPA fallback: any non-API route serves index.html
+app.get('*', (req, res, next) => {
+  // Don't catch API routes
+  if (req.path.startsWith('/api/') || req.path === '/health') {
+    return next();
+  }
+  res.sendFile(path.join(frontendBuildPath, 'index.html'), (err) => {
+    if (err) {
+      // If frontend build doesn't exist yet, fall through to 404
+      next();
+    }
+  });
+});
+
+// 404 handler (for API routes that don't exist)
 app.use((req, res) => {
   res.status(404).json({ error: 'Route not found', path: req.path });
 });
