@@ -311,19 +311,19 @@
 }
 
 .demo-profiles-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   margin-top: 12px;
 }
 .demo-profile-tile {
   background: var(--bg-elevated);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  padding: 10px;
+  padding: 10px 14px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   cursor: pointer;
   transition: var(--transition);
   text-align: left;
@@ -332,7 +332,7 @@
 .demo-profile-tile:hover:not(:disabled) {
   border-color: var(--accent-primary);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
   background: var(--bg-hover);
 }
 .demo-profile-tile:disabled {
@@ -340,8 +340,8 @@
   cursor: not-allowed;
 }
 .demo-avatar {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   background: linear-gradient(135deg, #3b82f6, #6366f1);
   color: white;
@@ -377,12 +377,21 @@
   text-overflow: ellipsis;
   margin-top: 2px;
 }
+.demo-tile-badge {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  background: rgba(59, 130, 246, 0.1);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: auto;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+}
 
 @media (max-width: 480px) {
   .register-form-grid {
-    grid-template-columns: 1fr;
-  }
-  .demo-profiles-grid {
     grid-template-columns: 1fr;
   }
   .login-card {

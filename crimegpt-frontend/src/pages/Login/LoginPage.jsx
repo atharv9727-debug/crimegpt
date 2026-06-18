@@ -269,6 +269,7 @@ export default function LoginPage() {
                       <p className="demo-tile-name">{officer.name}</p>
                       <p className="demo-tile-meta">{officer.rank} · {officer.district}</p>
                     </div>
+                    <span className="demo-tile-badge">{officer.badgeId}</span>
                   </button>
                 ))}
               </div>
