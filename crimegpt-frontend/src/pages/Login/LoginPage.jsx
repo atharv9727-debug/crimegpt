@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Shield, Zap, Eye, EyeOff, Lock, User, AlertCircle, Globe } from 'lucide-react';
+import { Shield, Zap, Eye, EyeOff, Lock, User, AlertCircle, Globe, Sun, Moon } from 'lucide-react';
 import toast from 'react-hot-toast';
 import useStore from '../../store/useStore';
 import logoImg from '../../assets/logo.png';
@@ -51,7 +51,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const login = useStore(s => s.login);
   const register = useStore(s => s.register);
-  const { language, setLanguage } = useStore();
+  const { language, setLanguage, theme, setTheme } = useStore();
   
   const [form, setForm] = useState({ badgeId: '', password: '' });
   const [registerForm, setRegisterForm] = useState({
@@ -147,25 +147,37 @@ export default function LoginPage() {
       </div>
 
       <div className="login-container">
-        {/* Language switcher */}
-        <div className="login-lang-switch" role="group" aria-label="Language selector">
-          <Globe size={14} className="lang-icon" />
-          {[
-            { code: 'en', label: 'EN', full: 'English' },
-            { code: 'hi', label: 'HI', full: 'हिंदी' },
-            { code: 'gu', label: 'GU', full: 'ગુજરાતી' },
-          ].map(l => (
-            <button
-              key={l.code}
-              type="button"
-              className={`login-lang-btn ${language === l.code ? 'active' : ''}`}
-              onClick={() => handleLang(l.code)}
-              title={l.full}
-              aria-pressed={language === l.code}
-            >
-              {l.label}
-            </button>
-          ))}
+        {/* Top Actions: Language & Theme switcher */}
+        <div className="login-top-actions">
+          <div className="login-lang-switch" role="group" aria-label="Language selector">
+            <Globe size={14} className="lang-icon" />
+            {[
+              { code: 'en', label: 'EN', full: 'English' },
+              { code: 'hi', label: 'HI', full: 'हिंदी' },
+              { code: 'gu', label: 'GU', full: 'ગુજરાતી' },
+            ].map(l => (
+              <button
+                key={l.code}
+                type="button"
+                className={`login-lang-btn ${language === l.code ? 'active' : ''}`}
+                onClick={() => handleLang(l.code)}
+                title={l.full}
+                aria-pressed={language === l.code}
+              >
+                {l.label}
+              </button>
+            ))}
+          </div>
+
+          <button
+            type="button"
+            className="login-theme-toggle"
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            aria-label="Toggle Theme"
+          >
+            {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
+          </button>
         </div>
 
         {/* Brand */}

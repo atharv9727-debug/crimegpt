@@ -243,7 +243,14 @@
   color: var(--text-muted);
 }
 
-/* Language switcher on Login Page */
+/* Language & Theme switcher on Login Page */
+.login-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-end;
+  margin-bottom: -8px;
+}
 .login-lang-switch {
   display: flex;
   align-items: center;
@@ -252,8 +259,6 @@
   border: 1px solid var(--border-default);
   padding: 4px 10px;
   border-radius: 99px;
-  margin-bottom: -8px;
-  align-self: flex-end;
 }
 .login-lang-switch .lang-icon {
   color: var(--text-muted);
@@ -277,6 +282,24 @@
   background: var(--accent-primary);
   color: white;
 }
+.login-theme-toggle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-default);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  cursor: pointer;
+}
+.login-theme-toggle:hover {
+  color: var(--text-primary);
+  border-color: var(--border-focus);
+}
+
 
 /* Sign Up & Demo profiles styling */
 .login-toggle-mode {

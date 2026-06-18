@@ -59,6 +59,32 @@
 .lang-native { font-size: 12px; color: var(--text-muted); }
 .lang-check { margin-left: auto; color: var(--accent-primary); font-weight: 700; font-size: 16px; }
 
+/* Theme Selector */
+.theme-options { display: flex; flex-direction: column; gap: 8px; }
+.theme-option {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  transition: var(--transition);
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+}
+.theme-option:hover { border-color: var(--border-default); }
+.theme-option.active { background: rgba(59,130,246,0.08); border-color: rgba(59,130,246,0.3); }
+.theme-option-icon {
+  width: 32px; height: 32px;
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.theme-option-icon.dark { background: rgba(139, 92, 246, 0.15); color: #a78bfa; }
+.theme-option-icon.light { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+.theme-option-name { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.theme-check { margin-left: auto; color: var(--accent-primary); font-weight: 700; font-size: 16px; }
+
 /* Toggles */
 .settings-toggles { display: flex; flex-direction: column; gap: 0; }
 .toggle-row {

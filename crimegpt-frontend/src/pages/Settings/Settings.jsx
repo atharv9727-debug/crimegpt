@@ -1,5 +1,5 @@
 import React from 'react';
-import { Globe, User, Shield, Bell, Moon, Database, Info } from 'lucide-react';
+import { Globe, User, Shield, Bell, Moon, Sun, Database, Info } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import useStore from '../../store/useStore';
 import './Settings.css';
@@ -12,7 +12,7 @@ const LANGUAGES = [
 
 export default function Settings() {
   const { t, i18n } = useTranslation();
-  const { officer, language, setLanguage } = useStore();
+  const { officer, language, setLanguage, theme, setTheme } = useStore();
 
   const handleLang = (code) => {
     setLanguage(code);
@@ -32,7 +32,7 @@ export default function Settings() {
               <p className="profile-rank">{officer?.rank}</p>
               <p className="profile-station">{officer?.station}</p>
               <p className="profile-badge">
-                <Shield size={11} /> {t('badgeIdLabel')}: {officer?.badge}
+                <Shield size={11} /> {t('badgeIdLabel')}: {officer?.badgeId}
               </p>
             </div>
           </div>
@@ -61,6 +61,34 @@ export default function Settings() {
                 {language === lang.code && <span className="lang-check">✓</span>}
               </button>
             ))}
+          </div>
+        </div>
+
+        {/* Theme Preference */}
+        <div className="settings-card">
+          <div className="settings-card-header"><Moon size={18} /> {t('themePreference')}</div>
+          <p className="settings-desc">{t('themeDesc')}</p>
+          <div className="theme-options">
+            <button
+              className={`theme-option ${theme === 'dark' ? 'active' : ''}`}
+              onClick={() => setTheme('dark')}
+            >
+              <div className="theme-option-icon dark"><Moon size={18} /></div>
+              <div>
+                <p className="theme-option-name">{t('darkMode')}</p>
+              </div>
+              {theme === 'dark' && <span className="theme-check">✓</span>}
+            </button>
+            <button
+              className={`theme-option ${theme === 'light' ? 'active' : ''}`}
+              onClick={() => setTheme('light')}
+            >
+              <div className="theme-option-icon light"><Sun size={18} /></div>
+              <div>
+                <p className="theme-option-name">{t('lightMode')}</p>
+              </div>
+              {theme === 'light' && <span className="theme-check">✓</span>}
+            </button>
           </div>
         </div>
 
