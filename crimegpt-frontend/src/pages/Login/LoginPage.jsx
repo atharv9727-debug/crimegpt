@@ -86,8 +86,9 @@ export default function LoginPage() {
       toast.success(t('welcomeBack'));
       navigate('/');
     } catch (err) {
-      setError(err.message || t('loginFailedDesc'));
-      toast.error(t('authFailed'));
+      const msg = err.message || t('loginFailedDesc');
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -107,8 +108,9 @@ export default function LoginPage() {
       toast.success(t('registerSuccess'));
       navigate('/');
     } catch (err) {
-      setError(err.message || t('registerFailed'));
-      toast.error(t('authFailed'));
+      const msg = err.message || t('registerFailed');
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -122,8 +124,9 @@ export default function LoginPage() {
       toast.success(t('welcomeBack'));
       navigate('/');
     } catch (err) {
-      setError(err.message || t('loginFailedDesc'));
-      toast.error(t('authFailed'));
+      const msg = err.message || t('loginFailedDesc');
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }

@@ -2,10 +2,15 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
+const path = require('path');
 const { body, validationResult } = require('express-validator');
 
-// In-memory user store (replace with MongoDB in production)
-const users = [
+// File-based persistence for registered users
+const USERS_FILE = path.join(__dirname, '..', '..', 'users.json');
+
+// Default demo officers
+const DEFAULT_USERS = [
   {
     id: '1',
     badgeId: 'GUJ-AHD-2847',
@@ -15,6 +20,7 @@ const users = [
     district: 'Ahmedabad City',
     avatar: 'AS',
     role: 'officer',
+    isDemo: true,
     // password: demo1234 (hashed)
     passwordHash: '$2a$10$xQb8V1lJRJj2tV/S4sYL5.F.QqEHzHrp0xJl6D9nLv7OV7rEaGNBS',
   },
@@ -27,6 +33,7 @@ const users = [
     district: 'Surat City',
     avatar: 'RP',
     role: 'officer',
+    isDemo: true,
     passwordHash: '$2a$10$xQb8V1lJRJj2tV/S4sYL5.F.QqEHzHrp0xJl6D9nLv7OV7rEaGNBS',
   },
   {
@@ -38,6 +45,7 @@ const users = [
     district: 'Gandhinagar',
     avatar: 'NS',
     role: 'officer',
+    isDemo: true,
     passwordHash: '$2a$10$xQb8V1lJRJj2tV/S4sYL5.F.QqEHzHrp0xJl6D9nLv7OV7rEaGNBS',
   },
   {
@@ -49,9 +57,45 @@ const users = [
     district: 'Vadodara City',
     avatar: 'SC',
     role: 'officer',
+    isDemo: true,
     passwordHash: '$2a$10$xQb8V1lJRJj2tV/S4sYL5.F.QqEHzHrp0xJl6D9nLv7OV7rEaGNBS',
   },
 ];
+
+// Load users from file or initialize with defaults
+function loadUsers() {
+  try {
+    if (fs.existsSync(USERS_FILE)) {
+      const data = fs.readFileSync(USERS_FILE, 'utf8');
+      const savedUsers = JSON.parse(data);
+      // Merge: keep all default demo users + any saved registered users
+      const registeredUsers = savedUsers.filter(u => !u.isDemo);
+      // Start with defaults, add registered
+      const merged = [...DEFAULT_USERS];
+      for (const ru of registeredUsers) {
+        if (!merged.find(u => u.badgeId === ru.badgeId)) {
+          merged.push(ru);
+        }
+      }
+      return merged;
+    }
+  } catch (err) {
+    console.error('Failed to load users file, using defaults:', err.message);
+  }
+  return [...DEFAULT_USERS];
+}
+
+// Save users to file
+function saveUsers() {
+  try {
+    fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), 'utf8');
+  } catch (err) {
+    console.error('Failed to save users file:', err.message);
+  }
+}
+
+// Initialize users array from file
+const users = loadUsers();
 
 const JWT_SECRET = process.env.JWT_SECRET || 'crimegpt-dev-secret-change-in-production';
 
@@ -69,13 +113,19 @@ router.post('/login',
       const { badgeId, password } = req.body;
       const user = users.find(u => u.badgeId === badgeId);
 
-      if (!user) return res.status(401).json({ error: 'Invalid credentials' });
+      if (!user) return res.status(401).json({ error: 'No officer found with this Badge ID. Please register first.' });
 
-      // For demo: accept any password or check hash
-      const valid = password === 'demo1234' || await bcrypt.compare(password, user.passwordHash);
-      if (!valid) return res.status(401).json({ error: 'Invalid credentials' });
+      // Check password: demo shortcut for demo users, bcrypt for all
+      let valid = false;
+      if (user.isDemo && password === 'demo1234') {
+        valid = true;
+      } else {
+        valid = await bcrypt.compare(password, user.passwordHash);
+      }
 
-      const { passwordHash, ...userSafe } = user;
+      if (!valid) return res.status(401).json({ error: 'Incorrect password. Please try again.' });
+
+      const { passwordHash, isDemo, ...userSafe } = user;
       const token = jwt.sign({ id: user.id, badgeId: user.badgeId, role: user.role }, JWT_SECRET, { expiresIn: '8h' });
 
       res.json({ token, officer: userSafe, message: 'Login successful' });
@@ -87,7 +137,7 @@ router.post('/login',
 router.post('/register',
   [
     body('badgeId').notEmpty().withMessage('Badge ID is required'),
-    body('password').notEmpty().withMessage('Password is required'),
+    body('password').isLength({ min: 4 }).withMessage('Password must be at least 4 characters'),
     body('name').notEmpty().withMessage('Name is required'),
     body('rank').notEmpty().withMessage('Rank is required'),
     body('station').notEmpty().withMessage('Station is required'),
@@ -100,7 +150,7 @@ router.post('/register',
 
       const { badgeId, password, name, rank, station, district } = req.body;
       const existing = users.find(u => u.badgeId === badgeId);
-      if (existing) return res.status(400).json({ error: 'Officer with this Badge ID already exists' });
+      if (existing) return res.status(400).json({ error: 'Officer with this Badge ID already exists. Please login instead.' });
 
       const salt = await bcrypt.genSalt(10);
       const passwordHash = await bcrypt.hash(password, salt);
@@ -109,7 +159,7 @@ router.post('/register',
       const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
 
       const newUser = {
-        id: String(users.length + 1),
+        id: String(Date.now()), // Use timestamp for unique IDs
         badgeId,
         name,
         rank,
@@ -117,13 +167,15 @@ router.post('/register',
         district,
         avatar: initials || 'OF',
         role: 'officer',
+        isDemo: false,
         passwordHash
       };
 
       users.push(newUser);
+      saveUsers(); // Persist to file
 
       const token = jwt.sign({ id: newUser.id, badgeId: newUser.badgeId, role: newUser.role }, JWT_SECRET, { expiresIn: '8h' });
-      const { passwordHash: _, ...userSafe } = newUser;
+      const { passwordHash: _, isDemo: __, ...userSafe } = newUser;
 
       res.status(201).json({ token, officer: userSafe, message: 'Officer registered successfully' });
     } catch (err) { next(err); }
@@ -134,7 +186,7 @@ router.post('/register',
 router.get('/me', requireAuth, (req, res) => {
   const user = users.find(u => u.id === req.user.id);
   if (!user) return res.status(404).json({ error: 'User not found' });
-  const { passwordHash, ...safe } = user;
+  const { passwordHash, isDemo, ...safe } = user;
   res.json(safe);
 });
 

@@ -55,7 +55,20 @@ const useStore = create((set, get) => ({
   isLoading: false,
 
   login: async (credentials) => {
-    set({ isLoading: true });
+    // Clear any previous auth state first (critical for user switching)
+    localStorage.removeItem('token');
+    localStorage.removeItem('officer');
+    set({ 
+      isAuthenticated: false, 
+      officer: null, 
+      isLoading: true,
+      cases: [],
+      selectedCase: null,
+      generatedDocs: [],
+      auditLog: [],
+      stats: { activeCases: 0, totalDocuments: 0, pendingArrests: 0, sectionsSuggested: 0 }
+    });
+
     try {
       const data = await apiRequest('/api/auth/login', {
         method: 'POST',
@@ -75,14 +88,27 @@ const useStore = create((set, get) => ({
       await get().initializeData();
       return true;
     } catch (err) {
-      set({ isLoading: false });
+      set({ isLoading: false, isAuthenticated: false, officer: null });
       console.error('Login failed:', err);
       throw err;
     }
   },
 
   register: async (officerData) => {
-    set({ isLoading: true });
+    // Clear any previous auth state first
+    localStorage.removeItem('token');
+    localStorage.removeItem('officer');
+    set({ 
+      isAuthenticated: false, 
+      officer: null, 
+      isLoading: true,
+      cases: [],
+      selectedCase: null,
+      generatedDocs: [],
+      auditLog: [],
+      stats: { activeCases: 0, totalDocuments: 0, pendingArrests: 0, sectionsSuggested: 0 }
+    });
+
     try {
       const data = await apiRequest('/api/auth/register', {
         method: 'POST',
@@ -101,7 +127,7 @@ const useStore = create((set, get) => ({
       await get().initializeData();
       return true;
     } catch (err) {
-      set({ isLoading: false });
+      set({ isLoading: false, isAuthenticated: false, officer: null });
       console.error('Registration failed:', err);
       throw err;
     }
