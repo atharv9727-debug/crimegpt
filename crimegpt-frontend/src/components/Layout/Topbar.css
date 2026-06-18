@@ -244,6 +244,14 @@
   }
 }
 
+@media (max-width: 600px) {
+  .topbar-right { gap: 8px; }
+  .lang-switcher { padding: 3px 6px 3px 4px; }
+  .lang-icon { display: none; }
+  .lang-btn { padding: 3.5px 6px; font-size: 10px; }
+  .icon-btn { width: 32px; height: 32px; }
+}
+
 @media (max-width: 480px) {
   .notif-dropdown {
     position: fixed;

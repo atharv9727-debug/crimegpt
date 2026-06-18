@@ -131,3 +131,11 @@
 .btn-secondary:hover { color: var(--text-primary); border-color: var(--border-focus); }
 
 @media (max-width: 768px) { .cd-grid { grid-template-columns: 1fr; } }
+@media (max-width: 480px) {
+  .cd-header { flex-direction: column; align-items: stretch; gap: 12px; }
+  .cd-actions { width: 100%; justify-content: flex-start; gap: 8px; }
+  .cd-actions button, .cd-actions .back-btn { flex: 1; justify-content: center; font-size: 12px; padding: 8px 12px; }
+  .cd-card { padding: 14px; }
+  .cd-person { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .person-role { width: auto; }
+}

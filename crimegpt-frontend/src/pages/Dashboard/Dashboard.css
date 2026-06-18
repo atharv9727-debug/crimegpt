@@ -199,3 +199,10 @@
 @media (max-width: 600px) {
   .stats-grid { grid-template-columns: 1fr 1fr; }
 }
+@media (max-width: 480px) {
+  .stats-grid { grid-template-columns: 1fr; }
+  .case-row { padding: 8px 10px; }
+  .case-row-right { flex-direction: column; align-items: flex-end; gap: 4px; }
+  .case-row-date { font-size: 10px; }
+  .quick-action-btn { font-size: 11px; padding: 12px 6px; }
+}

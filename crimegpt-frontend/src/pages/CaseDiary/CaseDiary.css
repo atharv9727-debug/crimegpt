@@ -116,3 +116,15 @@
 .timeline-type { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
 .timeline-action { font-size: 14px; color: var(--text-primary); line-height: 1.5; font-weight: 500; }
 .timeline-officer { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+@media (max-width: 600px) {
+  .entry-form-grid { grid-template-columns: 1fr; }
+  .diary-header { flex-direction: column; align-items: stretch; gap: 12px; }
+  .case-select-wrap { flex-direction: column; align-items: stretch; width: 100%; }
+  .case-select-wrap select { min-width: 100%; width: 100%; }
+  .diary-case-info { padding: 14px 16px; }
+  .timeline-item { grid-template-columns: 24px 12px 1fr; }
+  .timeline-dot { width: 24px; height: 24px; }
+  .timeline-dot svg { width: 12px; height: 12px; }
+  .timeline-connector { left: 11px; top: 24px; }
+}
