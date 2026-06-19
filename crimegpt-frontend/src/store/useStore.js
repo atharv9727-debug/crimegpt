@@ -307,7 +307,7 @@ const useStore = create((set, get) => ({
     set({ selectedCase: c || null });
   },
 
-  addCase: async (newCase) => {
+  addCase: (newCase) => {
     const now = new Date().toISOString();
     const cases = get().cases;
     const id = `CR-${new Date().getFullYear()}-${String(cases.length + 900).padStart(4, '0')}`;
@@ -346,7 +346,7 @@ const useStore = create((set, get) => ({
     return created.id;
   },
 
-  updateCase: async (id, updates) => {
+  updateCase: (id, updates) => {
     set(s => {
       const updatedCases = s.cases.map(c =>
         c.id === id ? { ...c, ...updates, updatedAt: new Date().toISOString() } : c
@@ -361,7 +361,7 @@ const useStore = create((set, get) => ({
     });
   },
 
-  addDiaryEntry: async (caseId, entry) => {
+  addDiaryEntry: (caseId, entry) => {
     const now = new Date();
     const newEntry = {
       date: now.toISOString().split('T')[0],
@@ -391,7 +391,7 @@ const useStore = create((set, get) => ({
   // ── Documents ───────────────────────────────────────────────────────────
   generatedDocs: [],
 
-  addDocument: async (doc) => {
+  addDocument: (doc) => {
     const officer = get().officer;
     const generated = {
       id: `DOC-${Date.now()}`,
@@ -431,7 +431,7 @@ const useStore = create((set, get) => ({
   // ── Audit ───────────────────────────────────────────────────────────────
   auditLog: [],
 
-  addAuditEntry: async (entry) => {
+  addAuditEntry: (entry) => {
     const officer = get().officer;
     const created = {
       id: String(Date.now()),
